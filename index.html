@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Chíp Tiện CNC — Mảnh cắt & linh kiện gia công kim loại</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Be+Vietnam+Pro:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#E9EDF0; --panel:#F7F9FA; --ink:#15212C; --muted:#5E6B77; --line:#C9D1D8;
+  --steel:#1F3A5F; --gold:#A87F1E; --gold-soft:#F3E6C4;
+  --P:#1F6FB5; --M:#D9AE00; --K:#C8322D; --N:#3E9B4F; --S:#B8672A; --H:#7D8790;
+  --display:"Barlow Condensed","Arial Narrow",Arial,sans-serif;
+  --body:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#10171E; --panel:#18222C; --ink:#E6ECF1; --muted:#95A3B0; --line:#2B3946;
+  --steel:#8FB4DE; --gold:#D8B04E; --gold-soft:#3A3120;
+}}
+:root[data-theme="dark"]{
+  --bg:#10171E; --panel:#18222C; --ink:#E6ECF1; --muted:#95A3B0; --line:#2B3946;
+  --steel:#8FB4DE; --gold:#D8B04E; --gold-soft:#3A3120;
+}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 72px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55}
+a{color:inherit}
+img,svg{max-width:100%}
+.wrap{max-width:1200px;margin:0 auto;padding:0 20px}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+
+/* top bar */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:16px;height:60px}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;font-family:var(--display);font-weight:700;font-size:26px;letter-spacing:.3px}
+.logo svg{width:30px;height:30px}
+.top nav{margin-left:auto;display:flex;gap:18px;font-size:15px}
+.top nav a{text-decoration:none;color:var(--muted)}
+.top nav a:hover{color:var(--ink)}
+.quote-btn{border:1.5px solid var(--ink);background:none;color:var(--ink);font:600 14px var(--body);padding:7px 14px;border-radius:4px;cursor:pointer;display:flex;gap:8px;align-items:center}
+.quote-btn b{background:var(--gold);color:#fff;border-radius:10px;min-width:22px;padding:0 6px;font-size:12px;line-height:20px;text-align:center}
+.logo{white-space:nowrap}
+@media (max-width:720px){.top nav{display:none}.quote-btn{margin-left:auto;padding:7px 10px}.quote-btn .lg{display:none}.logo{font-size:22px}}
+
+
+/* hero: decoder */
+.hero{padding:56px 0 40px}
+.hero h1{font-family:var(--display);font-weight:600;font-size:clamp(34px,5vw,54px);line-height:1.05;margin:0 0 14px;max-width:18ch}
+.hero p.lead{color:var(--muted);max-width:60ch;margin:0 0 36px;font-size:17px}
+.decoder{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:28px;display:grid;grid-template-columns:minmax(0,1fr) 220px;gap:28px;align-items:center}
+.decoder .hint{font-size:14px;color:var(--muted);margin:0 0 10px}
+.code-strip{display:flex;flex-wrap:wrap;gap:4px;font-family:var(--display);font-weight:700;font-size:clamp(44px,8vw,96px);line-height:1}
+.code-strip button{font:inherit;color:var(--ink);background:none;border:0;border-bottom:4px solid var(--line);padding:0 4px 6px;cursor:pointer;transition:border-color .15s,color .15s}
+.code-strip button[aria-pressed="true"]{border-color:var(--gold);color:var(--gold)}
+.code-strip .gap{width:.3em}
+.explain{margin-top:18px;min-height:74px}
+.explain h3{margin:0 0 4px;font-size:17px}
+.explain p{margin:0;color:var(--muted);max-width:62ch}
+.decoder-art svg{width:100%;height:auto;display:block}
+@media (max-width:760px){.decoder{grid-template-columns:1fr}.decoder-art{max-width:170px}}
+
+/* sections */
+section{padding:36px 0}
+h2{font-family:var(--display);font-weight:600;font-size:36px;margin:0 0 6px;line-height:1.1}
+.sub{color:var(--muted);margin:0 0 22px;max-width:65ch}
+
+/* filters */
+.filters{position:sticky;top:calc(env(safe-area-inset-top,0px) + 60px);z-index:10;background:var(--bg);padding:12px 0;border-bottom:1px solid var(--line);display:grid;grid-template-columns:minmax(0,1fr);gap:10px}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.search{flex:1 1 260px;display:flex;align-items:center;gap:8px;background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:0 12px}
+.search input{min-width:0;border:0;background:none;color:var(--ink);font:500 16px var(--body);padding:10px 0;width:100%;outline:none}
+select{background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:4px;font:500 15px var(--body);padding:10px 10px}
+.tabs{max-width:100%;min-width:0;display:flex;gap:0;overflow-x:auto;border:1px solid var(--line);border-radius:4px;background:var(--panel)}
+.tabs button{font:600 14px var(--body);background:none;border:0;color:var(--muted);padding:9px 14px;cursor:pointer;white-space:nowrap;border-right:1px solid var(--line)}
+.tabs button:last-child{border-right:0}
+.tabs button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.tabs small{font-weight:500;opacity:.7;margin-left:4px}
+.iso-chips{display:flex;gap:6px}
+.iso-chips button{width:34px;height:34px;border-radius:4px;border:2px solid var(--c);background:none;color:var(--ink);font:700 16px var(--display);cursor:pointer}
+.iso-chips button[aria-pressed="true"]{background:var(--c);color:#fff}
+.count{font-size:14px;color:var(--muted);margin-left:auto}
+
+/* grid */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);margin-top:18px}
+.item{background:var(--panel);padding:16px 16px 14px;display:flex;flex-direction:column;gap:8px;min-height:222px;position:relative}
+.item .shape{width:54px;height:54px;color:var(--steel)}
+.item .brand{font-size:13px;color:var(--muted);font-weight:600}
+.item .code{font-family:var(--display);font-weight:600;font-size:23px;line-height:1.1;word-break:break-word}
+.item .cat{font-size:13px;color:var(--muted)}
+.iso{display:flex;gap:3px;position:absolute;top:16px;right:16px}
+.iso span{width:22px;height:22px;border-radius:3px;background:var(--c);color:#fff;font:700 13px/22px var(--display);text-align:center}
+.item .foot{margin-top:auto;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.price{font-weight:600;white-space:nowrap}
+.price.ask{color:var(--muted);font-weight:500;font-size:14px}
+.add{white-space:nowrap;border:1.5px solid var(--steel);color:var(--steel);background:none;font:600 13px var(--body);padding:6px 10px;border-radius:4px;cursor:pointer}
+.add.on{background:var(--steel);color:var(--panel)}
+.empty{background:var(--panel);padding:40px;grid-column:1/-1}
+.empty button{margin-top:10px}
+
+/* materials */
+.mats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.mat{background:var(--panel);border-top:6px solid var(--c);padding:16px;border-radius:0 0 4px 4px}
+.mat b{font-family:var(--display);font-size:34px;line-height:1;color:var(--c);display:block}
+.mat h3{margin:6px 0 4px;font-size:16px}
+.mat p{margin:0;font-size:14px;color:var(--muted)}
+
+/* brands */
+.brands{display:flex;flex-wrap:wrap;gap:8px}
+.brands button{font:600 20px var(--display);letter-spacing:.3px;background:var(--panel);border:1px solid var(--line);color:var(--ink);padding:10px 16px;border-radius:4px;cursor:pointer}
+.brands button small{font:500 13px var(--body);color:var(--muted);margin-left:6px}
+.brands button:hover{border-color:var(--ink)}
+
+/* contact */
+.contact{display:grid;grid-template-columns:1.2fr 1fr;gap:28px;background:var(--steel);color:#fff;padding:32px;border-radius:6px}
+:root[data-theme="dark"] .contact{color:#10171E}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .contact{color:#10171E}}
+.contact h2{color:inherit}
+.contact p{opacity:.85;margin:0 0 8px}
+.contact dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:6px 16px}
+.contact dt{opacity:.7}
+.contact dd{margin:0;font-weight:600}
+@media (max-width:720px){.contact{grid-template-columns:1fr}}
+footer{padding:28px 0 40px;color:var(--muted);font-size:14px}
+
+/* quote drawer */
+.drawer{position:fixed;inset:0;z-index:50;display:none}
+.drawer.open{display:block}
+.drawer .scrim{position:absolute;inset:0;background:rgba(10,15,20,.45)}
+.drawer .sheet{position:absolute;right:0;top:0;bottom:0;width:min(420px,100%);background:var(--panel);display:flex;flex-direction:column;padding:calc(env(safe-area-inset-top,0px) + 20px) 20px calc(env(safe-area-inset-bottom,0px) + 20px);box-shadow:-10px 0 30px rgba(0,0,0,.2)}
+.sheet header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.sheet h2{font-size:28px}
+.close{background:none;border:0;color:var(--ink);font-size:26px;cursor:pointer;line-height:1}
+.qlist{flex:1;overflow:auto;border-top:1px solid var(--line)}
+.qrow{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}
+.qrow .code{font:600 19px var(--display)}
+.qrow small{display:block;color:var(--muted);font-size:13px}
+.qty{display:flex;align-items:center;border:1px solid var(--line);border-radius:4px}
+.qty button{background:none;border:0;color:var(--ink);width:30px;height:30px;font-size:18px;cursor:pointer}
+.qty span{min-width:26px;text-align:center;font-weight:600}
+.rm{background:none;border:0;color:var(--muted);cursor:pointer;font-size:13px;text-decoration:underline}
+.sheet .total{display:flex;justify-content:space-between;padding:14px 0;font-weight:600}
+.sheet textarea{width:100%;min-height:70px;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:4px;font:15px var(--body);padding:10px;resize:vertical}
+.primary{width:100%;margin-top:10px;background:var(--gold);color:#fff;border:0;border-radius:4px;font:600 16px var(--body);padding:13px;cursor:pointer}
+.toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 96px);transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:4px;font-size:14px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:60}
+.toast.show{opacity:1}
+@media (max-width:560px){.search{flex-basis:100%}.row select{flex:1 1 0;min-width:0}.grid{grid-template-columns:1fr 1fr}.item{min-height:0;padding:12px}.item .code{font-size:19px}.iso{top:12px;right:12px}.iso span{width:18px;height:18px;line-height:18px;font-size:11px}.item .foot{flex-direction:column;align-items:stretch}.decoder{padding:18px}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="#">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 16 16 5l13 11-13 11Z" fill="none" stroke="currentColor" stroke-width="2.4"/><circle cx="16" cy="16" r="3.4" fill="var(--gold)"/></svg>
+      Chíp Tiện CNC
+    </a>
+    <nav aria-label="Mục chính">
+      <a href="#san-pham">Sản phẩm</a>
+      <a href="#vat-lieu">Chọn theo vật liệu</a>
+      <a href="#hang">Hãng</a>
+      <a href="#lien-he">Liên hệ</a>
+    </nav>
+    <button class="quote-btn" id="openQuote" aria-haspopup="dialog"><span class="lg">Danh sách </span>Báo giá <b id="qCount">0</b></button>
+  </div>
+</header>
+
+<main>
+<div class="wrap">
+  <section class="hero">
+    <h1>Mảnh dao tiện, phay, khoan cho xưởng gia công kim loại</h1>
+    <p class="lead">Hàng chính hãng Kyocera, Tungaloy, Sandvik, Walter, Iscar, Sumitomo, Mitsubishi và nhiều hãng khác. Tìm theo mã, lọc theo vật liệu gia công, rồi gửi danh sách để nhận báo giá.</p>
+
+    <div class="decoder">
+      <div>
+        <p class="hint">Đọc một mã mảnh dao theo chuẩn ISO — chạm vào từng phần:</p>
+        <div class="code-strip" id="strip" role="group" aria-label="Mã CNMG 120408"></div>
+        <div class="explain" id="explain" aria-live="polite"></div>
+      </div>
+      <div class="decoder-art" id="art" aria-hidden="true"></div>
+    </div>
+  </section>
+
+  <section id="san-pham">
+    <h2>Danh mục sản phẩm</h2>
+    <p class="sub">Giá niêm yết để tham khảo. Mã chưa có giá, vui lòng thêm vào danh sách để được báo giá.</p>
+
+    <div class="filters">
+      <div class="row">
+        <label class="search">
+          <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="m15.5 15.5 5 5" stroke="currentColor" stroke-width="2"/></svg>
+          <input id="q" type="search" placeholder="Nhập mã, ví dụ CNMG120408" aria-label="Tìm mã hàng" autocomplete="off">
+        </label>
+        <select id="brand" aria-label="Lọc theo hãng"></select>
+        <select id="sort" aria-label="Sắp xếp">
+          <option value="brand">Theo hãng</option>
+          <option value="code">Theo mã A–Z</option>
+          <option value="pasc">Giá thấp đến cao</option>
+          <option value="pdesc">Giá cao đến thấp</option>
+        </select>
+      </div>
+      <div class="row">
+        <div class="tabs" id="tabs" role="group" aria-label="Loại sản phẩm"></div>
+        <div class="iso-chips" id="isoChips" role="group" aria-label="Vật liệu gia công"></div>
+        <span class="count" id="count"></span>
+      </div>
+    </div>
+
+    <div class="grid" id="grid"></div>
+  </section>
+
+  <section id="vat-lieu">
+    <h2>Chọn mảnh dao theo vật liệu</h2>
+    <p class="sub">Mỗi mảnh dao được xếp theo nhóm vật liệu ISO. Bấm vào một nhóm để xem các mã phù hợp.</p>
+    <div class="mats" id="mats"></div>
+  </section>
+
+  <section id="hang">
+    <h2>Các hãng đang có hàng</h2>
+    <p class="sub">Bấm vào tên hãng để xem toàn bộ mã của hãng đó.</p>
+    <div class="brands" id="brands"></div>
+  </section>
+
+  <section id="lien-he">
+    <div class="contact">
+      <div>
+        <h2>Cần tư vấn chọn mảnh dao?</h2>
+        <p>Gửi mã đang dùng hoặc ảnh mảnh dao cũ, cùng vật liệu phôi và máy gia công. Chúng tôi sẽ đề xuất mã tương đương và báo giá trong ngày.</p>
+      </div>
+      <dl>
+        <dt>Điện thoại</dt><dd>0900 000 000</dd>
+        <dt>Zalo</dt><dd>0900 000 000</dd>
+        <dt>Email</dt><dd>banhang@chiptiencnc.vn</dd>
+        <dt>Địa chỉ</dt><dd>Cập nhật địa chỉ cửa hàng</dd>
+      </dl>
+    </div>
+  </section>
+</div>
+</main>
+
+<footer><div class="wrap">© Chíp Tiện CNC. Tên hãng và mã sản phẩm thuộc về chủ sở hữu tương ứng. Giá có thể thay đổi, vui lòng liên hệ để có giá chính xác.</div></footer>
+
+<div class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="qTitle">
+  <div class="scrim" data-close></div>
+  <div class="sheet">
+    <header><h2 id="qTitle">Danh sách báo giá</h2><button class="close" data-close aria-label="Đóng">×</button></header>
+    <div class="qlist" id="qlist"></div>
+    <div class="total"><span>Tạm tính (mã có giá)</span><span id="qTotal">0 ₫</span></div>
+    <textarea id="qNote" placeholder="Ghi chú: vật liệu phôi, số lượng cần gấp, tên xưởng…" aria-label="Ghi chú"></textarea>
+    <button class="primary" id="copyQuote">Sao chép yêu cầu báo giá</button>
+  </div>
+</div>
+<div class="toast" id="toast" role="status"></div>
+<script>const DATA=[{"brand":"KYOCERA","code":"CNMG 120408PMG","iso":[],"price":600000,"cat":"tien","shape":"80"},{"brand":"TaeguTec","code":"DNMG150404L-VFTT5100","iso":[],"price":null,"cat":"tien","shape":"55"},{"brand":"KYOCERA","code":"CPMH090304HQ","iso":[],"price":300000,"cat":"tien","shape":"80"},{"brand":"TaeguTec","code":"DNMG15404MTTT8125B","iso":[],"price":null,"cat":"tien","shape":"55"},{"brand":"KYOCERA","code":"DNMG150412KG","iso":["K"],"price":750000,"cat":"tien","shape":"55"},{"brand":"TaeguTec","code":"TNMG160404MP TT5100","iso":[],"price":null,"cat":"tien","shape":"tri"},{"brand":"KYOCERA","code":"DNMG150404AH","iso":["K","N"],"price":700000,"cat":"tien","shape":"55"},{"brand":"TaeguTec","code":"TNMG130404FMTT8135","iso":[],"price":null,"cat":"tien","shape":"tri"},{"brand":"KYOCERA","code":"GVR250-020A","iso":[],"price":150000,"cat":"ranh","shape":"sq"},{"brand":"TaeguTec","code":"TNMG160404R-FSTT8125B","iso":["P"],"price":550000,"cat":"tien","shape":"tri"},{"brand":"KYOCERA","code":"SNMG120412KH","iso":[],"price":null,"cat":"tien","shape":"sq"},{"brand":"TaeguTec","code":"VNGG160404MLK10","iso":[],"price":500000,"cat":"tien","shape":"35"},{"brand":"KYOCERA","code":"TNGG110402R-S","iso":[],"price":250000,"cat":"tien","shape":"tri"},{"brand":"KYOCERA","code":"TPGH110304L","iso":[],"price":150000,"cat":"tien","shape":"tri"},{"brand":"KYOCERA","code":"TPMT110304GP","iso":[],"price":150000,"cat":"tien","shape":"tri"},{"brand":"KYOCERA","code":"VBMT160408HQ","iso":[],"price":null,"cat":"tien","shape":"35"},{"brand":"KYOCERA","code":"XTPGH090208R-CLH","iso":[],"price":150000,"cat":"tien","shape":"rect"},{"brand":"KYOCERA","code":"XW540-R040-ARG","iso":[],"price":null,"cat":"phukien","shape":"rect"},{"brand":"Khác","code":"CNMG120412KH","iso":["K"],"price":650000,"cat":"tien","shape":"80"},{"brand":"Khác","code":"CNMG120404XQ","iso":["P"],"price":400000,"cat":"tien","shape":"80"},{"brand":"Khác","code":"DNMG150404R","iso":["K","N"],"price":750000,"cat":"tien","shape":"55"},{"brand":"Khác","code":"WNMG080412KH","iso":["K"],"price":650000,"cat":"tien","shape":"trigon"},{"brand":"Khác","code":"VNMG160408","iso":["P"],"price":null,"cat":"tien","shape":"35"},{"brand":"Khác","code":"DNMG110402R-S","iso":["K","N"],"price":500000,"cat":"tien","shape":"55"},{"brand":"Khác","code":"BDMT11T308ER-JS","iso":["M","S"],"price":650000,"cat":"phay","shape":"55"},{"brand":"Khác","code":"ZCMT080304SP","iso":["P","M"],"price":350000,"cat":"phay","shape":"80"},{"brand":"Khác","code":"ZCMT10T304SP","iso":["P"],"price":400000,"cat":"phay","shape":"80"},{"brand":"Khác","code":"CGT11T30","iso":["P","M"],"price":480000,"cat":"ranh","shape":"80"},{"brand":"Khác","code":"CNMG120406SG","iso":["M","S"],"price":480000,"cat":"tien","shape":"80"},{"brand":"Khác","code":"PNMU1205ANER","iso":["P","M"],"price":null,"cat":"phay","shape":"pent"},{"brand":"SUMITOMO","code":"APNMT160508PDER-H","iso":[],"price":null,"cat":"phay","shape":"par"},{"brand":"DIA","code":"6N1409-L","iso":[],"price":null,"cat":"ranh","shape":"sq"},{"brand":"SUMITOMO","code":"CNMM643ENP AC8025P","iso":[],"price":null,"cat":"tien","shape":"80"},{"brand":"DIA","code":"DNMG150404-FH","iso":[],"price":null,"cat":"tien","shape":"55"},{"brand":"SUMITOMO","code":"RCMX200600 AC5025S","iso":[],"price":null,"cat":"tien","shape":"round"},{"brand":"DIA","code":"DNMG150408-LP","iso":[],"price":null,"cat":"tien","shape":"55"},{"brand":"SUMITOMO","code":"SEMT13T3AGSN-G","iso":[],"price":null,"cat":"phay","shape":"sq"},{"brand":"DIA","code":"JDNT1405520ZDSR-JM","iso":[],"price":null,"cat":"phay","shape":"rect"},{"brand":"SUMITOMO","code":"SNMM644ENP AC630M","iso":[],"price":null,"cat":"tien","shape":"sq"},{"brand":"DIA","code":"QOMT1035R-M2","iso":[],"price":null,"cat":"phay","shape":"rect"},{"brand":"SUMITOMO","code":"WDXT156012-H","iso":["H"],"price":null,"cat":"khoan","shape":"trigon"},{"brand":"DIA","code":"QOMT1651R-M2VP15TF","iso":[],"price":null,"cat":"phay","shape":"rect"},{"brand":"SUMITOMO","code":"WDXT156012-L","iso":[],"price":null,"cat":"khoan","shape":"trigon"},{"brand":"DIA","code":"QOMT2062R-M2","iso":[],"price":null,"cat":"phay","shape":"rect"},{"brand":"SUMITOMO","code":"XNMU06064PNER-G","iso":[],"price":450000,"cat":"phay","shape":"rect"},{"brand":"SANDVIK","code":"VBMT 16","iso":[],"price":680000,"cat":"tien","shape":"35"},{"brand":"SANDVIK","code":"WNMG080408-FP","iso":[],"price":null,"cat":"tien","shape":"trigon"},{"brand":"SANDVIK","code":"CoroDrill 880","iso":["P","M","K"],"price":650000,"cat":"khoan","shape":"80"},{"brand":"SANDVIK","code":"CoroMill 490","iso":["P"],"price":650000,"cat":"phay","shape":"80"},{"brand":"SANDVIK","code":"T-Max P","iso":["P","K"],"price":600000,"cat":"tien","shape":"tri"},{"brand":"SANDVIK","code":"CoroMill 331","iso":["K"],"price":450000,"cat":"phay","shape":"80"},{"brand":"SANDVIK","code":"880-08 05","iso":["P","M","K"],"price":750000,"cat":"khoan","shape":"sq"},{"brand":"SECO","code":"CNMG 12","iso":[],"price":650000,"cat":"tien","shape":"80"},{"brand":"SECO","code":"XOMX 18","iso":[],"price":750000,"cat":"phay","shape":"rect"},{"brand":"BIG DAISHOWA","code":"AG801108","iso":[],"price":650000,"cat":"tien","shape":"par"},{"brand":"ISCAR","code":"T490 LNMT 1306 PNTR IC830","iso":["P","M","S"],"price":850000,"cat":"phay","shape":"tri"},{"brand":"TUNGALOY","code":"AAOG180504DFR-AJKS15F","iso":[],"price":750000,"cat":"phay","shape":"par"},{"brand":"TUNGALOY","code":"AOGT180504PDFR-AJKS15F","iso":[],"price":750000,"cat":"phay","shape":"par"},{"brand":"BIG DAISHOWA","code":"ACP300ARTG801108","iso":[],"price":null,"cat":"tien","shape":"par"},{"brand":"TUNGALOY","code":"AOMT180508DPR-MJAH725","iso":[],"price":950000,"cat":"phay","shape":"par"},{"brand":"NICECUT","code":"C32GUXNK8080","iso":[],"price":null,"cat":"phay","shape":"80"},{"brand":"TUNGALOY","code":"CNGG120408-BR-2","iso":[],"price":null,"cat":"tien","shape":"80"},{"brand":"HITACHI","code":"CY250SDNW1505ZDTN-R15","iso":[],"price":null,"cat":"phay","shape":"80"},{"brand":"TUNGALOY","code":"CNMA120412T515","iso":[],"price":650000,"cat":"tien","shape":"80"},{"brand":"TUNGALOY","code":"CNMG120408","iso":[],"price":550000,"cat":"tien","shape":"80"},{"brand":"BIG DAISHOWA","code":"H1CCGA120404FN10","iso":[],"price":null,"cat":"tien","shape":"hex"},{"brand":"TUNGALOY","code":"CNMG120412-CHT515","iso":[],"price":650000,"cat":"tien","shape":"80"},{"brand":"MOLDINO","code":"JM4160WDNT40520ZH","iso":[],"price":null,"cat":"phay","shape":"rect"},{"brand":"TUNGALOY","code":"CNMR160412-27T9225","iso":[],"price":600000,"cat":"tien","shape":"80"},{"brand":"MOLDINO","code":"JMW4160 WDNT140520ZH","iso":[],"price":null,"cat":"phay","shape":"rect"},{"brand":"TUNGALOY","code":"CPMT090308-PMAH725","iso":[],"price":null,"cat":"tien","shape":"80"},{"brand":"MOLDINO","code":"JS4045DJDMT150504R-FW","iso":[],"price":null,"cat":"phay","shape":"rect"},{"brand":"TUNGALOY","code":"JTTR3005F","iso":[],"price":null,"cat":"ranh","shape":"rect"},{"brand":"MOLDINO","code":"JS4045JDMT150504-FW","iso":[],"price":null,"cat":"phay","shape":"rect"},{"brand":"TUNGALOY","code":"LXMU160504PER-MM AH3225","iso":[],"price":null,"cat":"phay","shape":"rect"},{"brand":"ISCAR","code":"LNMT15060PNRHTIC910560367","iso":[],"price":null,"cat":"phay","shape":"rect"},{"brand":"ISCAR","code":"OFMR 0704","iso":[],"price":750000,"cat":"phay","shape":"oct"},{"brand":"TUNGALOY","code":"PNCU0905GNEN-MJ T1215","iso":["K"],"price":450000,"cat":"phay","shape":"pent"},{"brand":"SECO","code":"OFMT 0704","iso":[],"price":700000,"cat":"phay","shape":"oct"},{"brand":"TUNGALOY","code":"PNCU0905GNEN-MJT121591","iso":[],"price":null,"cat":"phay","shape":"pent"},{"brand":"BIG DAISHOWA","code":"SCMM120408EFM","iso":[],"price":null,"cat":"tien","shape":"sq"},{"brand":"TUNGALOY","code":"PNCU0905GNER-MJ","iso":[],"price":null,"cat":"phay","shape":"pent"},{"brand":"CERATIZIT","code":"XCNT130408ENCTPP430","iso":[],"price":null,"cat":"tien","shape":"rect"},{"brand":"TUNGALOY","code":"PNCU0905GNER-MJAH120","iso":[],"price":null,"cat":"phay","shape":"pent"},{"brand":"INGERSOLL","code":"YDA323L101","iso":[],"price":null,"cat":"phukien","shape":"sq"},{"brand":"TUNGALOY","code":"PNCU0905GNER-MJT1115","iso":["P","M","K"],"price":750000,"cat":"phay","shape":"pent"},{"brand":"TUNGALOY","code":"PNCU0905GNER-NJ NS740","iso":[],"price":null,"cat":"phay","shape":"pent"},{"brand":"TUNGALOY","code":"PNCU0905GNFR-AJTH10","iso":[],"price":650000,"cat":"phay","shape":"pent"},{"brand":"TUNGALOY","code":"PNHU0905GNER-MJT3130","iso":["P"],"price":500000,"cat":"phay","shape":"pent"},{"brand":"TUNGALOY","code":"PNMU0905GNEN-MJ","iso":[],"price":null,"cat":"phay","shape":"pent"},{"brand":"TUNGALOY","code":"PNMU0905GNEN-MJAH3135","iso":[],"price":null,"cat":"phay","shape":"pent"},{"brand":"TUNGALOY","code":"RCMT1606EN-MJAHG140","iso":["P","M","K"],"price":850000,"cat":"phay","shape":"round"},{"brand":"TUNGALOY","code":"RCMT1606ENNMJAH120","iso":["P","M","K"],"price":750000,"cat":"phay","shape":"round"},{"brand":"TUNGALOY","code":"RCMT1606FN-NAJKS15F","iso":[],"price":null,"cat":"phay","shape":"round"},{"brand":"TUNGALOY","code":"RCMT1606N-NMJAH140","iso":[],"price":null,"cat":"phay","shape":"round"},{"brand":"TUNGALOY","code":"RCMT1608FN-NAJKS15F","iso":[],"price":null,"cat":"phay","shape":"round"},{"brand":"TUNGALOY","code":"SNM120412-27T9225","iso":["P"],"price":650000,"cat":"tien","shape":"sq"},{"brand":"TUNGALOY","code":"SNM120412T505","iso":["K"],"price":650000,"cat":"tien","shape":"sq"},{"brand":"TUNGALOY","code":"SNMG120408","iso":[],"price":null,"cat":"tien","shape":"sq"},{"brand":"TUNGALOY","code":"SNMU120608HNEN-MMT1215","iso":[],"price":null,"cat":"tien","shape":"sq"},{"brand":"TUNGALOY","code":"SNMU1706ANPR-MJT3225","iso":[],"price":null,"cat":"tien","shape":"sq"},{"brand":"TUNGALOY","code":"SNMU1706ANTR-MLAH3135","iso":[],"price":null,"cat":"tien","shape":"sq"},{"brand":"TUNGALOY","code":"SWMT1506ZER-MTAN120","iso":[],"price":null,"cat":"phay","shape":"sq"},{"brand":"TUNGALOY","code":"TNMG160408","iso":[],"price":550000,"cat":"tien","shape":"tri"},{"brand":"TUNGALOY","code":"TNMU120708PER-MJAH3225","iso":[],"price":null,"cat":"tien","shape":"tri"},{"brand":"TUNGALOY","code":"TOMT100404PDER-MUAH120","iso":[],"price":null,"cat":"phay","shape":"tri"},{"brand":"TUNGALOY","code":"TOMT100408PDER-MJAH3135","iso":[],"price":null,"cat":"phay","shape":"tri"},{"brand":"TUNGALOY","code":"TOMT150608DER-MJ T1215","iso":[],"price":null,"cat":"phay","shape":"tri"},{"brand":"TUNGALOY","code":"TPMT16T304-PMAH6235","iso":[],"price":null,"cat":"tien","shape":"tri"},{"brand":"TUNGALOY","code":"V160404","iso":[],"price":null,"cat":"tien","shape":"35"},{"brand":"TUNGALOY","code":"WNMA080412T515","iso":[],"price":650000,"cat":"tien","shape":"trigon"},{"brand":"TUNGALOY","code":"WNMG080408-AMT9225","iso":[],"price":null,"cat":"tien","shape":"trigon"},{"brand":"TUNGALOY","code":"WPMT080615ZSRAH120","iso":[],"price":null,"cat":"khoan","shape":"trigon"},{"brand":"TUNGALOY","code":"XXMU16X508PR-MJAH3135","iso":[],"price":null,"cat":"phay","shape":"rect"},{"brand":"WALTER","code":"APMT 15T3PDR-D55 WKP35S","iso":["P","K"],"price":600000,"cat":"phay","shape":"par"},{"brand":"MITSUBISHI","code":"CNMG190612-RM","iso":[],"price":null,"cat":"tien","shape":"80"},{"brand":"WALTER","code":"CNMU120608-D57T","iso":[],"price":850000,"cat":"tien","shape":"80"},{"brand":"MITSUBISHI","code":"LLSCN42","iso":[],"price":null,"cat":"phukien","shape":"rect"},{"brand":"WALTER","code":"CNMU160812-D57T","iso":[],"price":1250000,"cat":"tien","shape":"80"},{"brand":"MITSUBISHI","code":"SCMT09T308-MMMP7035","iso":[],"price":null,"cat":"tien","shape":"sq"},{"brand":"WALTER","code":"LNGX 130708R-L55 WKP35S","iso":["P","K"],"price":750000,"cat":"phay","shape":"rect"},{"brand":"MITSUBISHI","code":"SNMG190661-RK","iso":[],"price":null,"cat":"tien","shape":"sq"},{"brand":"WALTER","code":"LNMU 150812-F57T WKP25S","iso":[],"price":1250000,"cat":"phay","shape":"rect"},{"brand":"MITSUBISHI","code":"SOMT12T308PEER-JM","iso":[],"price":null,"cat":"khoan","shape":"sq"},{"brand":"WALTER","code":"ODHRT0605ZZN-G88","iso":["P","K"],"price":650000,"cat":"phay","shape":"oct"},{"brand":"WALTER","code":"P27275-3RWTA51","iso":[],"price":700000,"cat":"phukien","shape":"pent"},{"brand":"WALTER","code":"P2809-1","iso":[],"price":650000,"cat":"phukien","shape":"pent"},{"brand":"WALTER","code":"CNMG 160812-D57T WKP35S","iso":[],"price":1075000,"cat":"tien","shape":"80"},{"brand":"WALTER","code":"ODMT0605ZZN-D57 WKP25S","iso":[],"price":650000,"cat":"phay","shape":"oct"},{"brand":"WALTER","code":"ODMW060508-A57 WAK15","iso":[],"price":650000,"cat":"phay","shape":"oct"},{"brand":"BIG DAISHOWA","code":"C1603B","iso":[],"price":650000,"cat":"phukien","shape":"80"},{"brand":"BIG DAISHOWA","code":"CCMM 120408 EFM AC700G","iso":[],"price":650000,"cat":"tien","shape":"80"},{"brand":"SANDVIK","code":"WNMG 060408-PM 4425","iso":[],"price":800000,"cat":"tien","shape":"trigon"},{"brand":"ISCAR","code":"PENTA 24N250PF020 IC908","iso":[],"price":1200000,"cat":"ranh","shape":"round"},{"brand":"ISCAR","code":"LNMT 1506PN-R-HT IC910","iso":[],"price":850000,"cat":"phay","shape":"rect"},{"brand":"SANDVIK","code":"LDHT 190400-PL 1130","iso":[],"price":850000,"cat":"phay","shape":"rect"},{"brand":"ISCAR","code":"CNMG 432-M3P IC8150","iso":[],"price":800000,"cat":"tien","shape":"80"},{"brand":"ISCAR","code":"DNMG 150408-M3P IC8150","iso":[],"price":850000,"cat":"tien","shape":"55"},{"brand":"SANDVIK","code":"LEHT 18-416R-PL 1130","iso":[],"price":800000,"cat":"phay","shape":"rect"},{"brand":"SANDVIK","code":"R245 13T3M-PM 4220","iso":[],"price":750000,"cat":"phay","shape":"round"},{"brand":"SUMITOMO","code":"AXT170508PEER-S","iso":[],"price":800000,"cat":"phay","shape":"par"},{"brand":"BIG DAISHOWA","code":"TEP 40323","iso":[],"price":650000,"cat":"phukien","shape":"tri"},{"brand":"BIG DAISHOWA","code":"HTA 59318","iso":[],"price":650000,"cat":"phukien","shape":"hex"},{"brand":"SECO","code":"OFER070405TN-M16","iso":[],"price":1500000,"cat":"phay","shape":"oct"},{"brand":"SECO","code":"ONMU090520ANTN-MK2050","iso":[],"price":1400000,"cat":"phay","shape":"oct"},{"brand":"SECO","code":"SONX150508TR-M14 MK1500","iso":[],"price":900000,"cat":"phay","shape":"sq"},{"brand":"ISCAR","code":"TAGB 808Y","iso":[],"price":800000,"cat":"ranh","shape":"tri"},{"brand":"ISCAR","code":"SEMT 43AF","iso":[],"price":800000,"cat":"phay","shape":"sq"},{"brand":"ISCAR","code":"SPMT100408R-HQ-M IC328","iso":[],"price":800000,"cat":"phay","shape":"sq"},{"brand":"ISCAR","code":"CNMX 452","iso":[],"price":850000,"cat":"tien","shape":"80"},{"brand":"SANDVIK","code":"TNMX160408","iso":[],"price":750000,"cat":"tien","shape":"tri"}];
+const CATS={all:"Tất cả",tien:"Mảnh tiện",phay:"Mảnh phay",khoan:"Mảnh khoan",ranh:"Cắt rãnh & ren",phukien:"Linh kiện khác"};
+const ISO={P:["Thép","Thép cacbon, thép hợp kim, thép dụng cụ"],M:["Inox","Thép không gỉ austenit, duplex"],K:["Gang","Gang xám, gang cầu, gang dẻo"],N:["Kim loại màu","Nhôm, đồng, đồng thau, nhựa"],S:["Siêu hợp kim","Titan, Inconel, hợp kim chịu nhiệt"],H:["Thép đã tôi","Thép tôi cứng 45–65 HRC, gang trắng"]};
+const $=s=>document.querySelector(s);
+const fmt=n=>n.toLocaleString("vi-VN")+" ₫";
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+DATA.forEach((d,i)=>d.id=i);
+
+/* insert silhouettes, 100x100 */
+function rhomb(deg){const h=Math.tan(deg/2*Math.PI/180);const w=40,hh=40*h;return `M${50-w} 50 L50 ${50-hh} L${50+w} 50 L50 ${50+hh}Z`}
+function poly(n,r=38,rot=-90){let p=[];for(let i=0;i<n;i++){const a=(rot+i*360/n)*Math.PI/180;p.push((50+r*Math.cos(a)).toFixed(1)+" "+(50+r*Math.sin(a)).toFixed(1))}return "M"+p.join(" L")+"Z"}
+const PATHS={"80":rhomb(80),"55":rhomb(55),"35":rhomb(35),tri:poly(3,42),sq:"M16 16H84V84H16Z",round:null,rect:"M10 28H90V72H10Z",oct:poly(8,40,-67.5),pent:poly(5,40),hex:poly(6,40),par:"M24 26H92L76 74H8Z",
+ trigon:(()=>{let d="";for(let i=0;i<3;i++){const a=(-90+i*120)*Math.PI/180,b=(-90+(i+1)*120)*Math.PI/180;const p=[50+40*Math.cos(a),50+40*Math.sin(a)],q=[50+40*Math.cos(b),50+40*Math.sin(b)];const m=(-90+i*120+60)*Math.PI/180;const c=[50+34*Math.cos(m),50+34*Math.sin(m)];d+=(i?"":`M${p[0].toFixed(1)} ${p[1].toFixed(1)}`)+` L${c[0].toFixed(1)} ${c[1].toFixed(1)} L${q[0].toFixed(1)} ${q[1].toFixed(1)}`}return d+"Z"})()};
+const PART=`<svg viewBox="0 0 100 100" class="shape" aria-hidden="true"><g fill="currentColor" fill-opacity=".12" stroke="currentColor" stroke-width="3" stroke-linejoin="round"><path d="M12 38H52L62 30H88V70H62L52 62H12Z"/><path d="M62 30V70M74 30V70"/></g></svg>`;
+function shapeSVG(s,extra=""){const body=s==="round"?'<circle cx="50" cy="50" r="38"/>':`<path d="${PATHS[s]||PATHS.sq}" stroke-linejoin="round"/>`;
+ return `<svg viewBox="0 0 100 100" class="shape" aria-hidden="true"><g fill="currentColor" fill-opacity=".12" stroke="currentColor" stroke-width="3">${body}</g><circle cx="50" cy="50" r="9" fill="none" stroke="currentColor" stroke-width="3"/>${extra}</svg>`}
+
+/* decoder */
+const SEG=[["C","Hình dạng: C — hình thoi 80°","Mũi dao khỏe, dùng hai góc 80° để tiện thô và bán tinh mặt ngoài, mặt đầu.","angle"],
+["N","Góc sau: N — 0°","Mảnh âm, không có góc thoát ở cạnh nên dùng được cả hai mặt, gấp đôi số lưỡi cắt.","side"],
+["M","Cấp dung sai: M","Dung sai trung bình của mảnh ép thiêu kết, phù hợp đa số nguyên công tiện thông dụng.","shape"],
+["G","Kiểu mảnh: G","Có lỗ kẹp hình trụ và rãnh bẻ phoi ở cả hai mặt.","hole"],
+[" "],
+["12","Chiều dài cạnh cắt: 12","Cạnh cắt dài khoảng 12,9 mm, cho chiều sâu cắt tối đa khoảng 6 mm.","edge"],
+["04","Chiều dày: 04","Mảnh dày 4,76 mm.","side"],
+["08","Bán kính mũi: 08","Bán kính mũi dao 0,8 mm — cân bằng giữa độ bền mũi và độ bóng bề mặt.","nose"]];
+let segOn=0;
+function drawArt(k){const h=Math.tan(40*Math.PI/180)*40;const gold="var(--gold)";let x="";
+ if(k==="angle")x=`<path d="M26.9 35.9 A22 22 0 0 1 26.9 64.1" fill="none" stroke="${gold}" stroke-width="4"/>`;
+ if(k==="edge")x=`<line x1="10" y1="50" x2="50" y2="${50-h}" stroke="${gold}" stroke-width="6" stroke-linecap="round"/>`;
+ if(k==="nose")x=`<circle cx="12" cy="50" r="8" fill="none" stroke="${gold}" stroke-width="4"/>`;
+ if(k==="hole")x=`<circle cx="50" cy="50" r="9" fill="${gold}"/>`;
+ if(k==="shape")x=`<path d="${PATHS["80"]}" fill="none" stroke="${gold}" stroke-width="4" stroke-dasharray="6 5"/>`;
+ if(k==="side")return `<svg viewBox="0 0 100 100" class="shape" style="color:var(--steel)" aria-hidden="true"><rect x="8" y="40" width="84" height="20" rx="2" fill="currentColor" fill-opacity=".12" stroke="currentColor" stroke-width="3"/><line x1="8" y1="40" x2="8" y2="60" stroke="${gold}" stroke-width="6"/><line x1="92" y1="40" x2="92" y2="60" stroke="${gold}" stroke-width="6"/><text x="50" y="80" text-anchor="middle" font-size="10" fill="currentColor" font-family="sans-serif">nhìn cạnh bên</text></svg>`;
+ return shapeSVG("80",x).replace('class="shape"','class="shape" style="color:var(--steel)"')}
+function renderDecoder(){$("#strip").innerHTML=SEG.map((s,i)=>s[0]===" "?'<span class="gap"></span>':`<button aria-pressed="${i===segOn}" data-i="${i}">${s[0]}</button>`).join("");
+ const s=SEG[segOn];$("#explain").innerHTML=`<h3>${s[1]}</h3><p>${s[2]}</p>`;$("#art").innerHTML=drawArt(s[3])}
+$("#strip").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;segOn=+b.dataset.i;renderDecoder()});
+renderDecoder();
+
+/* state */
+const st={q:"",cat:"all",brand:"",iso:new Set(),sort:"brand"};
+let quote={};try{quote=JSON.parse(localStorage.getItem("quote")||"{}")}catch(e){quote={}}
+const saveQ=()=>{try{localStorage.setItem("quote",JSON.stringify(quote))}catch(e){}};
+
+const brands=[...new Set(DATA.map(d=>d.brand))].sort((a,b)=>a==="Khác"?1:b==="Khác"?-1:a.localeCompare(b));
+$("#brand").innerHTML='<option value="">Tất cả hãng</option>'+brands.map(b=>`<option>${esc(b)}</option>`).join("");
+$("#isoChips").innerHTML=Object.keys(ISO).map(k=>`<button style="--c:var(--${k})" data-k="${k}" aria-pressed="false" title="${ISO[k][0]}">${k}</button>`).join("");
+$("#mats").innerHTML=Object.entries(ISO).map(([k,v])=>{const n=DATA.filter(d=>d.iso.includes(k)).length;return `<a href="#san-pham" class="mat" style="--c:var(--${k});text-decoration:none" data-k="${k}"><b>${k}</b><h3>${v[0]}</h3><p>${v[1]}</p><p style="margin-top:8px"><strong style="color:var(--ink)">${n} mã</strong> đã phân loại</p></a>`}).join("");
+$("#brands").innerHTML=brands.map(b=>`<button data-b="${esc(b)}">${esc(b)}<small>${DATA.filter(d=>d.brand===b).length}</small></button>`).join("");
+
+const norm=s=>s.toUpperCase().replace(/[\s\-\.]/g,"");
+function filtered(ignoreCat){const q=norm(st.q);return DATA.filter(d=>(!q||norm(d.code).includes(q)||norm(d.brand).includes(q))&&(ignoreCat||st.cat==="all"||d.cat===st.cat)&&(!st.brand||d.brand===st.brand)&&[...st.iso].every(k=>d.iso.includes(k)))}
+function render(){
+ const base=filtered(true);
+ $("#tabs").innerHTML=Object.entries(CATS).map(([k,v])=>`<button data-c="${k}" aria-pressed="${st.cat===k}">${v}<small>${k==="all"?base.length:base.filter(d=>d.cat===k).length}</small></button>`).join("");
+ let list=filtered(false);
+ const s=st.sort;list.sort((a,b)=>s==="code"?a.code.localeCompare(b.code):s==="pasc"?(a.price??1e12)-(b.price??1e12):s==="pdesc"?(b.price??-1)-(a.price??-1):(brands.indexOf(a.brand)-brands.indexOf(b.brand))||a.code.localeCompare(b.code));
+ $("#count").textContent=list.length+" mã";
+ $("#grid").innerHTML=list.length?list.map(d=>`<article class="item">
+  <div class="iso">${d.iso.map(k=>`<span style="--c:var(--${k})" title="${ISO[k][0]}">${k}</span>`).join("")}</div>
+  ${d.cat==="phukien"?PART:shapeSVG(d.shape)}
+  <div><div class="brand">${esc(d.brand)}</div><div class="code">${esc(d.code)}</div><div class="cat">${CATS[d.cat]}</div></div>
+  <div class="foot">${d.price?`<span class="price">${fmt(d.price)}</span>`:'<span class="price ask">Liên hệ báo giá</span>'}
+  <button class="add ${quote[d.id]?"on":""}" data-id="${d.id}" aria-pressed="${!!quote[d.id]}">${quote[d.id]?"✓ Đã thêm":"+ Báo giá"}</button></div></article>`).join("")
+ :`<div class="empty"><strong>Không có mã nào khớp.</strong><p class="sub" style="margin:4px 0 0">Thử bỏ bớt bộ lọc, hoặc gửi mã cho chúng tôi để tìm mã tương đương.</p><button class="add" id="reset">Xóa bộ lọc</button></div>`;
+ document.querySelectorAll("#isoChips button").forEach(b=>b.setAttribute("aria-pressed",st.iso.has(b.dataset.k)));
+ $("#brand").value=st.brand;
+ renderQuote();
+}
+$("#q").addEventListener("input",e=>{st.q=e.target.value;render()});
+$("#brand").addEventListener("change",e=>{st.brand=e.target.value;render()});
+$("#sort").addEventListener("change",e=>{st.sort=e.target.value;render()});
+$("#tabs").addEventListener("click",e=>{const b=e.target.closest("button");if(b){st.cat=b.dataset.c;render()}});
+$("#isoChips").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;const k=b.dataset.k;st.iso.has(k)?st.iso.delete(k):st.iso.add(k);render()});
+$("#mats").addEventListener("click",e=>{const a=e.target.closest(".mat");if(!a)return;st.iso=new Set([a.dataset.k]);st.cat="all";render()});
+$("#brands").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;st.brand=b.dataset.b;st.cat="all";st.iso.clear();render();$("#san-pham").scrollIntoView()});
+$("#grid").addEventListener("click",e=>{if(e.target.id==="reset"){st.q="";$("#q").value="";st.cat="all";st.brand="";st.iso.clear();render();return}
+ const b=e.target.closest(".add[data-id]");if(!b)return;const id=b.dataset.id;if(quote[id])delete quote[id];else{quote[id]=1;toast("Đã thêm "+DATA[id].code)}saveQ();render()});
+
+/* quote drawer */
+function renderQuote(){const ids=Object.keys(quote);$("#qCount").textContent=ids.length;
+ $("#qlist").innerHTML=ids.length?ids.map(id=>{const d=DATA[id];return `<div class="qrow"><div><span class="code">${esc(d.code)}</span><small>${esc(d.brand)} · ${d.price?fmt(d.price):"Liên hệ"}</small><button class="rm" data-rm="${id}">Bỏ</button></div>
+ <div class="qty"><button data-dec="${id}" aria-label="Giảm">−</button><span>${quote[id]}</span><button data-inc="${id}" aria-label="Tăng">+</button></div></div>`}).join("")
+ :'<p class="sub" style="padding:16px 0">Chưa có mã nào. Bấm “Thêm vào báo giá” ở mỗi sản phẩm để đưa vào danh sách.</p>';
+ $("#qTotal").textContent=fmt(ids.reduce((s,id)=>s+(DATA[id].price||0)*quote[id],0))}
+$("#qlist").addEventListener("click",e=>{const t=e.target;const inc=t.dataset.inc,dec=t.dataset.dec,rm=t.dataset.rm;
+ if(inc)quote[inc]++;if(dec){quote[dec]--;if(quote[dec]<1)delete quote[dec]}if(rm)delete quote[rm];if(inc||dec||rm){saveQ();render()}});
+const drawer=$("#drawer");
+$("#openQuote").addEventListener("click",()=>{drawer.classList.add("open");drawer.querySelector(".close").focus()});
+drawer.addEventListener("click",e=>{if(e.target.hasAttribute("data-close"))drawer.classList.remove("open")});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")drawer.classList.remove("open")});
+$("#copyQuote").addEventListener("click",async()=>{const ids=Object.keys(quote);if(!ids.length){toast("Danh sách đang trống");return}
+ const txt="Yêu cầu báo giá — Chíp Tiện CNC\n"+ids.map((id,i)=>`${i+1}. ${DATA[id].brand} ${DATA[id].code} — SL: ${quote[id]}`).join("\n")+($("#qNote").value?"\nGhi chú: "+$("#qNote").value:"");
+ try{await navigator.clipboard.writeText(txt);toast("Đã sao chép. Dán vào Zalo hoặc email để gửi.")}catch(e){$("#qNote").value=txt;$("#qNote").select();toast("Hãy sao chép nội dung trong ô ghi chú.")}});
+let tt;function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("show");clearTimeout(tt);tt=setTimeout(()=>t.classList.remove("show"),2200)}
+render();
+</script>
+</body>
+</html>
