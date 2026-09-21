@@ -285,6 +285,41 @@ body.noscroll{overflow:hidden}
 #stTable .st-row{grid-template-columns:minmax(0,1fr) 72px 118px}
 .st-headrow{position:sticky;top:0;background:var(--panel);z-index:1;font-size:12px;font-weight:600;color:var(--muted);padding-top:6px;padding-bottom:6px}
 @media (max-width:560px){.bulk{grid-template-columns:1fr}#stTable .st-row{grid-template-columns:minmax(0,1fr) 60px 100px;gap:6px}}
+.owner-btn{margin-left:8px}
+.remember{margin-top:10px}
+.ad-head-act{display:flex;align-items:center;gap:14px}
+.thumb-btn{background:none;border:0;padding:0;cursor:pointer;width:54px;height:54px;display:block}
+.thumb-btn .shape{width:54px;height:54px;color:var(--steel)}
+img.thumb{width:72px;height:54px;object-fit:cover;border-radius:3px;background:#fff}
+.thumb-btn:has(img.thumb:not([hidden])){width:72px}
+.linkbtn{background:none;border:0;padding:0;color:inherit;text-align:left;cursor:pointer;font:inherit}
+.item .code.linkbtn{font-family:var(--display);font-weight:600;font-size:23px;line-height:1.1;word-break:break-word;display:block}
+.item .code.linkbtn:hover{text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:3px}
+img.cimg{width:44px;height:44px;object-fit:cover;border-radius:3px}
+.detail-box{width:min(720px,100%)}
+.dmeta{color:var(--muted);font-weight:600;font-size:13px}
+.dcode{font-size:34px;word-break:break-word}
+.dgrid{display:grid;grid-template-columns:220px minmax(0,1fr);gap:22px;align-items:start}
+.dimg{background:var(--bg);border:1px solid var(--line);border-radius:4px;aspect-ratio:1;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.dimg .shape{width:70%;height:70%;color:var(--steel)}
+.dimg img{width:100%;height:100%;object-fit:contain;background:#fff}
+.dinfo{display:grid;gap:10px;justify-items:start}
+.diso{display:flex;flex-wrap:wrap;gap:6px}
+.diso span{background:var(--c);color:#fff;font-size:13px;font-weight:600;padding:2px 8px;border-radius:3px}
+.dprice{font-size:22px}
+.dprice .price.sale s{font-size:15px}
+.dbuy{display:flex;gap:8px;flex-wrap:wrap}
+.dbuy .primary{width:auto;margin:0;padding:11px 22px}
+.spec{width:100%;border-collapse:collapse;font-size:15px}
+.spec caption{text-align:left;color:var(--muted);font-size:13px;padding-bottom:6px}
+.spec th{text-align:left;font-weight:500;color:var(--muted);width:44%;padding:7px 10px 7px 0;border-bottom:1px solid var(--line);vertical-align:top}
+.spec td{padding:7px 0;border-bottom:1px solid var(--line);font-weight:600;word-break:break-word}
+.dlinks{margin:0;padding-left:20px;display:grid;gap:6px}
+.dlinks a{color:var(--steel);font-weight:600}
+.owner-edit{margin-top:18px;padding:14px;border:1.5px dashed var(--gold);border-radius:4px}
+.owner-edit h3{margin-top:0}
+.file-btn{display:inline-flex;align-items:center;cursor:pointer}
+@media (max-width:600px){.dgrid{grid-template-columns:1fr}.dimg{max-width:240px}.dcode{font-size:28px}}
 </style>
 </head>
 <body>
@@ -300,6 +335,7 @@ body.noscroll{overflow:hidden}
       <a href="#hang">Hãng</a>
       <a href="#lien-he">Liên hệ</a>
     </nav>
+    <button class="quote-btn owner-btn" id="ownerBtn" hidden>Quản lý</button>
     <button class="quote-btn needs-unlock" id="openCart" aria-haspopup="dialog" aria-label="Mở giỏ hàng"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h2.5l2.2 10.2a1 1 0 0 0 1 .8h8.9a1 1 0 0 0 1-.8L20 8H6.4" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><circle cx="9.5" cy="19" r="1.6" fill="currentColor"/><circle cx="17" cy="19" r="1.6" fill="currentColor"/></svg><span class="lg">Giỏ hàng</span> <b id="cCount">0</b></button>
   </div>
 </header>
@@ -415,12 +451,17 @@ body.noscroll{overflow:hidden}
 </div>
 <div id="printArea" aria-hidden="true"></div>
 
+<!-- Chi tiết sản phẩm -->
+<div class="admin" id="detail" role="dialog" aria-modal="true" aria-labelledby="dTitle" hidden>
+  <div class="admin-box detail-box" id="detailBox"></div>
+</div>
+
 <!-- Khu vực chủ shop -->
 <div class="admin" id="admin" role="dialog" aria-modal="true" aria-labelledby="adTitle" hidden>
   <div class="admin-box">
     <header class="ad-head">
       <h2 id="adTitle">Quản lý của chủ shop</h2>
-      <button class="close" id="closeAdmin" aria-label="Đóng">×</button>
+      <div class="ad-head-act"><button class="linklike" id="logoutBtn" hidden>Đăng xuất</button><button class="close" id="closeAdmin" aria-label="Đóng">×</button></div>
     </header>
 
     <form id="adLogin" class="ad-login">
@@ -429,6 +470,7 @@ body.noscroll{overflow:hidden}
         <input id="adPass" type="password" autocomplete="current-password">
         <button class="primary" type="submit">Đăng nhập</button>
       </div>
+      <label class="check remember"><input type="checkbox" id="adRemember" checked> Ghi nhớ đăng nhập trên máy này</label>
       <p class="form-msg" id="adLoginMsg" role="alert"></p>
     </form>
 
@@ -541,6 +583,10 @@ const CR = {
     const base = await crypto.subtle.importKey("raw", CR.enc.encode(pass), "PBKDF2", false, ["deriveKey"]);
     return crypto.subtle.deriveKey({ name: "PBKDF2", salt, iterations: iter, hash: "SHA-256" }, base, { name: "AES-GCM", length: 256 }, false, ["encrypt", "decrypt"]);
   },
+  async deriveRaw(pass, salt, iter) {
+    const base = await crypto.subtle.importKey("raw", CR.enc.encode(pass), "PBKDF2", false, ["deriveBits"]);
+    return new Uint8Array(await crypto.subtle.deriveBits({ name: "PBKDF2", salt, iterations: iter, hash: "SHA-256" }, base, 256));
+  },
   aesKey(raw) { return crypto.subtle.importKey("raw", raw, "AES-GCM", false, ["encrypt", "decrypt"]); },
   async seal(key, bytes) { const iv = CR.rnd(12); const ct = new Uint8Array(await crypto.subtle.encrypt({ name: "AES-GCM", iv }, key, bytes)); return { iv: CR.b64(iv), ct: CR.b64(ct) }; },
   async open(key, box) { return new Uint8Array(await crypto.subtle.decrypt({ name: "AES-GCM", iv: CR.ub64(box.iv) }, key, CR.ub64(box.ct))); },
@@ -550,7 +596,7 @@ const CR = {
   slotEnd(periodH, idx) { return (idx + 1) * periodH * 3600e3 - TZ_MS; },
   /* Đóng gói toàn bộ: khoá dữ liệu mới mỗi lần lưu, bọc khoá bằng từng mã theo thời gian và bằng mật khẩu chủ */
   slotCountFor(periodH) { return Math.max(SLOT_COUNT, Math.ceil(COVER_DAYS * 24 / periodH)); },
-  async pack({ products, codes, period, start, masterPass, pub, extra, onProgress }) {
+  async pack({ products, codes, period, start, masterPass, masterRaw, masterSalt, masterIter, pub, extra, onProgress }) {
     const K = CR.rnd(32), key = await CR.aesKey(K);
     const updated = Date.now();
     const data = await CR.seal(key, CR.enc.encode(JSON.stringify({ products, updated, ...(extra || {}) })));
@@ -562,8 +608,10 @@ const CR = {
       })));
       if (onProgress) onProgress(Math.min(1, (i + 24) / codes.length));
     }
-    const msalt = CR.rnd(16), mk = await CR.derive(masterPass, msalt, MASTER_ITER);
-    const master = { s: CR.b64(msalt), iter: MASTER_ITER, ...(await CR.seal(mk, K)) };
+    let msalt, mk, miter;
+    if (masterRaw) { msalt = CR.ub64(masterSalt); miter = masterIter; mk = await CR.aesKey(masterRaw); }
+    else { msalt = CR.rnd(16); miter = MASTER_ITER; mk = await CR.derive(masterPass, msalt, MASTER_ITER); }
+    const master = { s: CR.b64(msalt), iter: miter, ...(await CR.seal(mk, K)) };
     const sched = await CR.seal(mk, CR.enc.encode(JSON.stringify({ codes })));
     return { v: 1, period, start, iter: CODE_ITER, slots, master, sched, data, updated, pub: pub || null };
   },
@@ -577,8 +625,14 @@ const CR = {
     } catch (e) { return { error: "wrong" }; }
   },
   async openWithMaster(file, pass) {
+    const raw = await CR.deriveRaw(pass, CR.ub64(file.master.s), file.master.iter);
+    const res = await CR.openWithMasterRaw(file, raw);
+    if (!res.error) res.raw = raw;
+    return res;
+  },
+  async openWithMasterRaw(file, raw) {
     try {
-      const mk = await CR.derive(pass, CR.ub64(file.master.s), file.master.iter);
+      const mk = await CR.aesKey(raw);
       const K = await CR.open(mk, file.master);
       const sched = JSON.parse(CR.dec.decode(await CR.open(mk, file.sched)));
       const data = JSON.parse(CR.dec.decode(await CR.open(await CR.aesKey(K), file.data)));
@@ -695,6 +749,7 @@ function initApp(){
   $("#mats").addEventListener("click",e=>{const a=e.target.closest(".mat");if(!a)return;st.iso=new Set([a.dataset.k]);st.cat="all";render()});
   $("#brands").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;st.brand=b.dataset.b;st.cat="all";st.iso.clear();render();$("#san-pham").scrollIntoView()});
   $("#grid").addEventListener("click",e=>{
+    const op=e.target.closest("[data-open]");if(op){openDetail(op.dataset.open);return}
     if(e.target.id==="reset"){st.q="";$("#q").value="";st.cat="all";st.brand="";st.iso.clear();st.inStock=false;$("#inStock").checked=false;render();return}
     qtyClick(e)});
   $("#grid").addEventListener("change",qtyInput);
@@ -726,8 +781,8 @@ function render(){
   $("#count").textContent=list.length+" mã";
   $("#grid").innerHTML=list.length?list.map(d=>{const out=d.qty!=null&&d.qty<=0,n=cart[d.id]||0;return `<article class="item${out?" soldout":""}">
     <div class="iso">${d.iso.map(k=>`<span style="--c:var(--${k})" title="${ISO[k][0]}">${k}</span>`).join("")}</div>
-    ${d.cat==="phukien"?PART:shapeSVG(d.shape)}
-    <div><div class="brand">${esc(d.brand)}</div><div class="code">${esc(d.code)}</div><div class="cat">${CATS[d.cat]}</div>${stockHTML(d)}</div>
+    <button class="thumb-btn" data-open="${d.id}" aria-label="Xem chi tiết ${esc(d.code)}">${imgTag(d,"thumb")}</button>
+    <div><div class="brand">${esc(d.brand)}</div><button class="code linkbtn" data-open="${d.id}">${esc(d.code)}</button><div class="cat">${CATS[d.cat]}</div>${stockHTML(d)}</div>
     <div class="foot">${priceHTML(d)}
     ${n?stepper(d,n):`<button class="add" data-add="${d.id}" ${out?"disabled":""}>${out?"Hết hàng":"Thêm vào giỏ"}</button>`}</div></article>`}).join("")
   :`<div class="empty"><strong>Không có mã nào khớp.</strong><p class="sub" style="margin:4px 0 0">Thử bỏ bớt bộ lọc, hoặc gửi mã cho chúng tôi để tìm mã tương đương.</p><button class="add" id="reset">Xóa bộ lọc</button></div>`;
@@ -746,7 +801,7 @@ function setQty(id,n,silent){
   const d=DATA[id];if(!d)return;n=Math.floor(+n||0);const m=maxQty(d);
   if(n>m){n=m;if(!silent)toast(m?`Chỉ còn ${m} chiếc ${d.code}`:`${d.code} đã hết hàng`)}
   if(n<=0)delete cart[id];else cart[id]=n;
-  saveCart();render();if($("#drawer").classList.contains("open"))renderSheet();
+  saveCart();render();if($("#drawer").classList.contains("open"))renderSheet();if(detailId!=null)openDetail(detailId);
 }
 function qtyClick(e){
   const t=e.target.closest("[data-add],[data-inc],[data-dec],[data-rm]");if(!t||t.disabled)return;
@@ -789,7 +844,7 @@ function renderSheet(){
   body.scrollTop=0;
   if(view==="checkout")toggleCheckoutFields();
 }
-function lineThumb(d){return d.cat==="phukien"?PART:shapeSVG(d.shape)}
+function lineThumb(d){return imgTag(d,"cimg")}
 function cartView(){
   const lines=cartLines();
   const note=notices.length?`<div class="notice">${notices.map(esc).join("<br>")}</div>`:"";
@@ -937,26 +992,139 @@ async function sheetClick(e){
   if(s==="print")printOrder(currentOrder);
 }
 
+/* ---------- chi tiết sản phẩm & thông số ---------- */
+const BRAND_SITE={"KYOCERA":"kyocera.com","TUNGALOY":"tungaloy.com","SANDVIK":"sandvik.coromant.com","WALTER":"walter-tools.com","ISCAR":"iscar.com","SUMITOMO":"sumitool.com","MITSUBISHI":"mmc-carbide.com","SECO":"secotools.com","TaeguTec":"taegutec.com","BIG DAISHOWA":"big-daishowa.com","CERATIZIT":"ceratizit.com","INGERSOLL":"ingersoll-imc.com","MOLDINO":"moldino.com","HITACHI":"moldino.com"};
+const SH={A:"Hình bình hành 85°",B:"Hình bình hành 82°",C:"Hình thoi 80°",D:"Hình thoi 55°",E:"Hình thoi 75°",H:"Lục giác",K:"Hình bình hành 55°",L:"Hình chữ nhật",M:"Hình thoi 86°",O:"Bát giác",P:"Ngũ giác",R:"Tròn",S:"Vuông 90°",T:"Tam giác 60°",V:"Hình thoi 35°",W:"Tam giác lồi (trigon) 80°"};
+const CLR={A:"3°",B:"5°",C:"7°",D:"15°",E:"20°",F:"25°",G:"30°",N:"0° — chíp âm, dùng được 2 mặt",P:"11°",O:"Góc đặc biệt"};
+const TOL="ACEFGHJKLMNU";
+const TYP={A:"Có lỗ kẹp, không rãnh bẻ phoi",G:"Có lỗ kẹp, rãnh bẻ phoi 2 mặt",M:"Có lỗ kẹp, rãnh bẻ phoi 1 mặt",N:"Không lỗ, không rãnh bẻ phoi",R:"Không lỗ, rãnh bẻ phoi 1 mặt",F:"Không lỗ, rãnh bẻ phoi 2 mặt",T:"Lỗ vát côn 1 mặt, có rãnh bẻ phoi",W:"Lỗ vát côn 1 mặt, không rãnh bẻ phoi",U:"Lỗ vát côn 2 mặt, có rãnh bẻ phoi",Q:"Lỗ vát côn 2 mặt, không rãnh bẻ phoi",B:"Lỗ vát côn 1 mặt, không rãnh bẻ phoi",H:"Lỗ vát côn 1 mặt, có rãnh bẻ phoi",C:"Lỗ vát côn 2 mặt, không rãnh bẻ phoi",J:"Lỗ vát côn 2 mặt, có rãnh bẻ phoi",X:"Kiểu đặc biệt của hãng"};
+const THK={"01":1.59,"T1":1.98,"02":2.38,"T2":2.78,"03":3.18,"T3":3.97,"04":4.76,"05":5.56,"06":6.35,"07":7.94,"09":9.52};
+const ICT={C:{"06":6.35,"09":9.525,"12":12.7,"16":15.875,"19":19.05,"25":25.4},D:{"07":6.35,"11":9.525,"15":12.7,"19":15.875},T:{"09":5.56,"11":6.35,"16":9.525,"22":12.7,"27":15.875},V:{"11":6.35,"16":9.525,"22":12.7},W:{"06":9.525,"08":12.7},S:{"09":9.525,"12":12.7,"15":15.875,"19":19.05,"25":25.4}};
+const mm=n=>n.toLocaleString("vi-VN",{maximumFractionDigits:3})+" mm";
+function decodeISO(code){
+  const s=code.toUpperCase().replace(/\s+/g,"");
+  let m=s.match(/^([A-Z])([A-Z])([A-Z])([A-Z])(\d)(\d)(\d)(?!\d)(.*)$/);
+  const ok=(a,b,c,d)=>SH[a]&&CLR[b]&&TOL.includes(c)&&TYP[d];
+  const rows=[];
+  if(m&&ok(m[1],m[2],m[3],m[4])&&/^\d{3}(\D|$)/.test(s.slice(4))&&code.includes(" ")){ // hệ inch, VD: CNMG 432
+    rows.push(["Hình dạng",SH[m[1]]],["Góc sau",CLR[m[2]]],["Cấp dung sai",m[3]+(/[MNU]/.test(m[3])?" — thông dụng":" — chính xác cao")],["Kiểu chíp",TYP[m[4]]],
+      ["Vòng tròn nội tiếp (IC)",mm(+m[5]*3.175)+` (${m[5]}/8 inch)`],["Chiều dày",mm(+m[6]*1.5875)+` (${m[6]}/16 inch)`],["Bán kính mũi",m[7]==="0"?"Mũi nhọn":mm(+m[7]*0.396875)+` (${m[7]}/64 inch)`]);
+    if(m[8].replace(/^[-]/,""))rows.push(["Rãnh bẻ phoi / mác hợp kim",m[8].replace(/^[-]/,"")]);
+    return {rows,system:"Mã ISO hệ inch"};
+  }
+  m=s.match(/^([A-Z])([A-Z])([A-Z])([A-Z])(\d{2})?(\d{2}|T\d)?(\d{2}(?!\d)|M0)?(.*)$/);
+  if(!m||!ok(m[1],m[2],m[3],m[4]))return null;
+  rows.push(["Hình dạng",SH[m[1]]],["Góc sau",CLR[m[2]]],["Cấp dung sai",m[3]+(/[MNU]/.test(m[3])?" — thông dụng":" — chính xác cao")],["Kiểu chíp",TYP[m[4]]]);
+  if(m[5]){
+    if(m[1]==="R")rows.push(["Đường kính",mm(+m[5])]);
+    else{const ic=ICT[m[1]]&&ICT[m[1]][m[5]];rows.push(["Chiều dài cạnh cắt","khoảng "+(+m[5])+" mm"]);if(ic)rows.push(["Vòng tròn nội tiếp (IC)",mm(ic)])}
+  }
+  if(m[6]&&THK[m[6]])rows.push(["Chiều dày",mm(THK[m[6]])]);
+  if(m[7])rows.push(["Bán kính mũi",m[7]==="00"?"Mũi nhọn":m[7]==="M0"?"Chíp tròn":mm(+m[7]/10)]);
+  const rest=(m[8]||"").replace(/^[-]/,"");
+  if(rest)rows.push([m[7]?"Rãnh bẻ phoi / mác hợp kim":"Ký hiệu góc, cạnh gạt, mác hợp kim",rest]);
+  return {rows,system:"Mã ISO hệ mét"};
+}
+function gq(q){return "https://www.google.com/search?q="+encodeURIComponent(q)}
+function productLinks(d){
+  const site=BRAND_SITE[d.brand],brand=d.brand==="Khác"?"":d.brand;
+  const L=[];
+  if(d.link)L.push([d.link,"Trang sản phẩm do shop gắn"]);
+  if(site)L.push([gq(`${d.code} site:${site}`),`Tìm trên website chính hãng ${d.brand}`]);
+  L.push(["https://www.google.com/search?tbm=isch&q="+encodeURIComponent(`${brand} ${d.code} insert`.trim()),"Xem hình ảnh trên Google"]);
+  L.push([gq(`${brand} ${d.code} insert catalog`.trim()),"Tìm catalog và thông số kỹ thuật"]);
+  return L;
+}
+function imgTag(d,cls){
+  const fb=d.cat==="phukien"?PART:shapeSVG(d.shape);
+  if(!d.img)return fb;
+  return `<img class="${cls}" src="${esc(d.img)}" alt="Ảnh ${esc(d.code)}" loading="lazy" onerror="this.hidden=true;this.nextElementSibling.hidden=false"><span hidden>${fb}</span>`;
+}
+let detailId=null;
+function openDetail(id){
+  const d=DATA[id];if(!d)return;const fresh=detailId!==+id;detailId=+id;
+  const spec=decodeISO(d.code),n=cart[d.id]||0,out=d.qty!=null&&d.qty<=0;
+  const p=admin.on?admin.products[id]:null;
+  $("#detailBox").innerHTML=`<header class="ad-head"><div><small class="dmeta">${esc(d.brand)} · ${CATS[d.cat]}</small><h2 id="dTitle" class="dcode">${esc(d.code)}</h2></div><button class="close" data-dclose aria-label="Đóng">×</button></header>
+  <div class="dgrid">
+    <div class="dimg">${imgTag(d,"dphoto")}</div>
+    <div class="dinfo">
+      ${d.iso.length?`<div class="diso">${d.iso.map(k=>`<span style="--c:var(--${k})">${k} · ${ISO[k][0]}</span>`).join("")}</div>`:""}
+      ${stockHTML(d)}
+      <div class="dprice">${priceHTML(d)}</div>
+      <div class="dbuy">${n?stepper(d,n)+`<button class="add" data-dcart>Xem giỏ hàng</button>`:`<button class="primary" data-add="${d.id}" ${out?"disabled":""}>${out?"Hết hàng":"Thêm vào giỏ"}</button>`}</div>
+    </div>
+  </div>
+  <h3>Thông số kỹ thuật</h3>
+  ${spec?`<table class="spec"><caption>${spec.system}, giải mã từ mã hàng</caption>${spec.rows.map(([k,v])=>`<tr><th>${k}</th><td>${esc(v)}</td></tr>`).join("")}</table>`:`<p class="sub">Mã này không theo ký hiệu ISO tiêu chuẩn. Xem thông số chính xác ở các liên kết bên dưới.</p>`}
+  <h3>Hình ảnh và thông tin từ hãng</h3>
+  <ul class="dlinks">${productLinks(d).map(([u,t])=>`<li><a href="${esc(u)}" target="_blank" rel="noopener">${t}</a></li>`).join("")}</ul>
+  ${p?`<div class="owner-edit"><h3>Ảnh và liên kết (chỉ chủ shop thấy)</h3>
+    <div class="form-grid">
+      <label>Link ảnh <input id="edImg" value="${esc(p.img||"")}" placeholder="https://… hoặc tải ảnh lên"></label>
+      <label>Link trang sản phẩm chính hãng <input id="edLink" value="${esc(p.link||"")}" placeholder="https://…"></label>
+    </div>
+    <div class="ad-actions"><button class="add" data-edsave>Áp dụng</button><label class="add file-btn">Chụp / chọn ảnh để tải lên<input type="file" accept="image/*" id="edFile" hidden></label>${p.img?`<button class="add" data-edclear>Bỏ ảnh</button>`:""}</div>
+    <p class="sub small">Ảnh tải lên được lưu vào thư mục images của repo (cần GitHub token). Sau đó bấm Lưu lên web.</p></div>`:""}`;
+  $("#detail").hidden=false;document.body.classList.add("noscroll");if(fresh)$("#detail").scrollTop=0;
+}
+function closeDetail(){$("#detail").hidden=true;detailId=null;if(!$("#drawer").classList.contains("open"))document.body.classList.remove("noscroll")}
+$("#detail").addEventListener("click",async e=>{
+  if(e.target===$("#detail")||e.target.closest("[data-dclose]")){closeDetail();return}
+  if(e.target.closest("[data-dcart]")){closeDetail();openSheet("cart");return}
+  qtyClick(e);
+  if(e.target.closest("[data-edsave]")){const p=admin.products[detailId];p.img=$("#edImg").value.trim()||undefined;p.link=$("#edLink").value.trim()||undefined;afterEdit();openDetail(detailId);toast("Đã áp dụng. Bấm Lưu lên web để khách thấy.")}
+  if(e.target.closest("[data-edclear]")){const p=admin.products[detailId];delete p.img;afterEdit();openDetail(detailId)}
+});
+$("#detail").addEventListener("change",async e=>{
+  qtyInput(e);
+  if(e.target.id!=="edFile"||!e.target.files[0])return;
+  if(!gh.token){toast("Cần GitHub token để tải ảnh lên. Hoặc dán link ảnh có sẵn.");return}
+  const id=detailId,file=e.target.files[0];
+  try{
+    toast("Đang tải ảnh lên…");
+    const bmp=await createImageBitmap(file),sc=Math.min(1,900/Math.max(bmp.width,bmp.height));
+    const c=document.createElement("canvas");c.width=Math.round(bmp.width*sc);c.height=Math.round(bmp.height*sc);
+    c.getContext("2d").drawImage(bmp,0,0,c.width,c.height);
+    const b64=c.toDataURL("image/jpeg",0.82).split(",")[1];
+    const path=`images/${norm(admin.products[id].code).toLowerCase().replace(/[^a-z0-9]/g,"")}-${id}-${Date.now().toString(36)}.jpg`;
+    await ghPut(path,b64,"Thêm ảnh "+admin.products[id].code);
+    admin.products[id].img=path;afterEdit();if(detailId===id)openDetail(id);
+    toast("Đã tải ảnh lên. Bấm Lưu lên web, ảnh hiện sau khoảng 1 phút.");
+  }catch(err){toast(err.message||"Tải ảnh không thành công")}
+});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#detail").hidden)closeDetail()});
 /* ---------- khu vực chủ shop ---------- */
-const admin={on:false,pass:null,codes:[],period:24,start:0,products:[],deducted:[],pub:{},dirty:false};
+const admin={on:false,mkRaw:null,msalt:"",miter:0,remember:false,codes:[],period:24,start:0,products:[],deducted:[],pub:{},dirty:false};
 const gh=Object.assign({owner:"Thanhcong6",repo:"chipcnc",branch:"main",token:""},store.get("gh",{}));
 function setDirty(v){admin.dirty=v;$("#dirty").textContent=v?"Có thay đổi chưa lưu":""}
 $("#openAdmin").addEventListener("click",()=>{$("#admin").hidden=false;(admin.on?$("#adBody button"):$("#adPass")).focus()});
 $("#closeAdmin").addEventListener("click",()=>{if(admin.dirty&&!confirm("Có thay đổi chưa lưu lên web. Vẫn đóng?"))return;$("#admin").hidden=true});
+function enterAdmin(res,raw,openPanel){
+  Object.assign(admin,{on:true,mkRaw:raw,msalt:FILE.master.s,miter:FILE.master.iter,codes:res.codes,period:FILE.period,start:FILE.start,products:res.data.products.map(p=>({...p})),deducted:res.data.deducted||[],pub:{...PUB}});
+  fillPubForm();
+  $("#adLogin").hidden=true;$("#adBody").hidden=false;$("#adPass").value="";$("#adLoginMsg").textContent="";
+  ["Owner","Repo","Branch","Token"].forEach(k=>$("#gh"+k).value=gh[k.toLowerCase()]);
+  $("#periodSel").value=String(admin.period);
+  renderCodes();renderStock();
+  unlockedSlot=CR.slotIndex(FILE.period);showCatalog(res.data);
+  $("#expiry").textContent="Bạn đang xem với quyền chủ shop. Bấm vào tên sản phẩm để gắn ảnh và liên kết.";
+  $("#ownerBtn").hidden=false;$("#openAdmin").textContent="Mở quản lý";$("#logoutBtn").hidden=false;
+  if(!openPanel)$("#admin").hidden=true;
+}
+function rememberOwner(){if(admin.remember)store.set("owner",{s:admin.msalt,i:admin.miter,k:CR.b64(admin.mkRaw)})}
 $("#adLogin").addEventListener("submit",async e=>{
   e.preventDefault();const msg=$("#adLoginMsg");
   if(!FILE){msg.textContent="Chưa tải được data.json. Kiểm tra file đã có trong repo chưa.";return}
   msg.className="form-msg ok";msg.textContent="Đang kiểm tra…";
-  const pass=$("#adPass").value;const res=await CR.openWithMaster(FILE,pass);
+  const res=await CR.openWithMaster(FILE,$("#adPass").value);
   if(res.error){msg.className="form-msg";msg.textContent="Mật khẩu không đúng.";return}
-  Object.assign(admin,{on:true,pass,codes:res.codes,period:FILE.period,start:FILE.start,products:res.data.products.map(p=>({...p})),deducted:res.data.deducted||[],pub:{...PUB}});
-  fillPubForm();
-  msg.textContent="";$("#adLogin").hidden=true;$("#adBody").hidden=false;$("#adPass").value="";
-  ["Owner","Repo","Branch","Token"].forEach(k=>$("#gh"+k).value=gh[k.toLowerCase()]);
-  $("#periodSel").value=String(admin.period);
-  renderCodes();renderStock();
-  unlockedSlot=CR.slotIndex(FILE.period);setExpiry();showCatalog(res.data);
+  admin.remember=$("#adRemember").checked;
+  enterAdmin(res,res.raw,true);rememberOwner();
+  if(admin.remember)toast("Đã ghi nhớ đăng nhập trên máy này");
 });
+$("#ownerBtn").addEventListener("click",()=>$("#openAdmin").click());
+$("#logoutBtn").addEventListener("click",()=>{if(admin.dirty&&!confirm("Có thay đổi chưa lưu lên web. Vẫn đăng xuất?"))return;store.del("owner");store.del("view");location.reload()});
 $("#adBody .ad-tabs").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;$$("#adBody .ad-tabs button").forEach(x=>x.setAttribute("aria-pressed",x===b));$$(".ad-pane").forEach(p=>p.hidden=p.dataset.p!==b.dataset.t)});
 
 /* mã theo thời gian */
@@ -1022,10 +1190,10 @@ $("#bulkReset").addEventListener("click",()=>{const rows=stockRows().filter(({p}
 
 /* cài đặt */
 $("#saveGh").addEventListener("click",()=>{["Owner","Repo","Branch","Token"].forEach(k=>gh[k.toLowerCase()]=$("#gh"+k).value.trim());store.set("gh",gh);toast("Đã lưu cài đặt GitHub trên trình duyệt này")});
-$("#changePass").addEventListener("click",()=>{const a=$("#newPass1").value,b=$("#newPass2").value;
-  if(a.length<8){toast("Mật khẩu cần ít nhất 8 ký tự");return}if(a!==b){toast("Hai lần nhập không khớp");return}
-  admin.pass=a;$("#newPass1").value=$("#newPass2").value="";setDirty(true);toast("Đã đổi. Bấm Lưu lên web để áp dụng mật khẩu mới.")});
-
+$("#changePass").addEventListener("click",async()=>{const p1=$("#newPass1").value,p2=$("#newPass2").value;
+  if(p1.length<8){toast("Mật khẩu cần ít nhất 8 ký tự");return}if(p1!==p2){toast("Hai lần nhập không khớp");return}
+  const salt=CR.rnd(16);admin.mkRaw=await CR.deriveRaw(p1,salt,MASTER_ITER);admin.msalt=CR.b64(salt);admin.miter=MASTER_ITER;
+  $("#newPass1").value=$("#newPass2").value="";setDirty(true);toast("Đã đổi. Bấm Lưu lên web để áp dụng mật khẩu mới.")});
 
 /* thông tin shop */
 function fillPubForm(){
@@ -1064,27 +1232,30 @@ $("#orderPreview").addEventListener("click",e=>{
 /* lưu */
 async function buildFile(){
   topUp();
-  const file=await CR.pack({products:admin.products,codes:admin.codes,period:admin.period,start:admin.start,masterPass:admin.pass,pub:admin.pub,extra:{deducted:admin.deducted.slice(-300)},onProgress:f=>{$("#saveWeb").textContent="Đang mã hoá… "+Math.round(f*100)+"%"}});
+  const file=await CR.pack({products:admin.products,codes:admin.codes,period:admin.period,start:admin.start,masterRaw:admin.mkRaw,masterSalt:admin.msalt,masterIter:admin.miter,pub:admin.pub,extra:{deducted:admin.deducted.slice(-300)},onProgress:f=>{$("#saveWeb").textContent="Đang mã hoá… "+Math.round(f*100)+"%"}});
   return JSON.stringify(file);
 }
 function busy(on){$("#saveWeb").disabled=$("#dlData").disabled=on;$("#saveWeb").textContent=on?"Đang mã hoá… 0%":"Lưu lên web"}
 $("#dlData").addEventListener("click",async()=>{busy(true);try{const txt=await buildFile();
   const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([txt],{type:"application/json"}));a.download="data.json";a.click();
-  toast("Đã tải data.json. Tải file này lên repo để cập nhật web.");FILE=JSON.parse(txt);setDirty(false);renderCodes()}finally{busy(false)}});
+  toast("Đã tải data.json. Tải file này lên repo để cập nhật web.");afterSaved(txt)}finally{busy(false)}});
+async function ghPut(path,b64,message){
+  const url=`https://api.github.com/repos/${gh.owner}/${gh.repo}/contents/${path}`;
+  const h={Authorization:"Bearer "+gh.token,Accept:"application/vnd.github+json"};
+  let sha;const r=await fetch(url+"?ref="+encodeURIComponent(gh.branch)+"&t="+Date.now(),{headers:h,cache:"no-store"});
+  if(r.ok)sha=(await r.json()).sha;else if(r.status===401)throw new Error("Token sai hoặc đã hết hạn.");else if(r.status!==404)throw new Error("Không đọc được repo (mã lỗi "+r.status+"). Kiểm tra tên tài khoản, repo và quyền của token.");
+  const body={message,content:b64,branch:gh.branch};if(sha)body.sha=sha;
+  const p=await fetch(url,{method:"PUT",headers:h,body:JSON.stringify(body)});
+  if(!p.ok)throw new Error(p.status===403||p.status===404?"Token không có quyền ghi vào repo (cần quyền Contents: Read and write).":"GitHub báo lỗi "+p.status+".");
+}
+function afterSaved(txt){FILE=JSON.parse(txt);setDirty(false);renderCodes();$$("#stTable input.changed").forEach(x=>x.classList.remove("changed"));rememberOwner()}
 $("#saveWeb").addEventListener("click",async()=>{
   if(!gh.token){toast("Chưa có GitHub token. Vào Cài đặt, hoặc dùng Tải file data.json.");$('#adBody .ad-tabs button[data-t="settings"]').click();return}
   busy(true);
   try{
     const txt=await buildFile();$("#saveWeb").textContent="Đang đăng…";
-    const url=`https://api.github.com/repos/${gh.owner}/${gh.repo}/contents/data.json`;
-    const h={Authorization:"Bearer "+gh.token,Accept:"application/vnd.github+json"};
-    let sha;const r=await fetch(url+"?ref="+encodeURIComponent(gh.branch)+"&t="+Date.now(),{headers:h,cache:"no-store"});
-    if(r.ok)sha=(await r.json()).sha;else if(r.status===401)throw new Error("Token sai hoặc đã hết hạn.");else if(r.status!==404)throw new Error("Không đọc được repo (mã lỗi "+r.status+"). Kiểm tra tên tài khoản, repo và quyền của token.");
-    const body={message:"Cập nhật số lượng, giá và mã xem "+fmtTime(Date.now()),content:CR.b64(CR.enc.encode(txt)),branch:gh.branch};if(sha)body.sha=sha;
-    const p=await fetch(url,{method:"PUT",headers:h,body:JSON.stringify(body)});
-    if(!p.ok)throw new Error(p.status===403||p.status===404?"Token không có quyền ghi vào repo (cần quyền Contents: Read and write).":"GitHub báo lỗi "+p.status+".");
-    FILE=JSON.parse(txt);setDirty(false);renderCodes();$$("#stTable input.changed").forEach(x=>x.classList.remove("changed"));
-    toast("Đã lưu. Web cập nhật sau khoảng 1 phút.");
+    await ghPut("data.json",CR.b64(CR.enc.encode(txt)),"Cập nhật số lượng, giá và mã xem "+fmtTime(Date.now()));
+    afterSaved(txt);toast("Đã lưu. Web cập nhật sau khoảng 1 phút.");
   }catch(e){toast(e.message||"Lưu không thành công.")}finally{busy(false)}
 });
 
@@ -1092,6 +1263,11 @@ $("#saveWeb").addEventListener("click",async()=>{
 (async()=>{
   try{await loadFile()}catch(e){applyPub();$("#lockMsg").textContent="Không tải được dữ liệu. Kiểm tra kết nối rồi tải lại trang.";return}
   applyPub(FILE.pub);
+  const own=store.get("owner",null);
+  if(own){
+    if(own.s===FILE.master.s){const res=await CR.openWithMasterRaw(FILE,CR.ub64(own.k));if(!res.error){admin.remember=true;enterAdmin(res,CR.ub64(own.k),false);return}}
+    store.del("owner");
+  }
   if(location.hash==="#admin")$("#openAdmin").click();
   const saved=store.get("view",null);
   if(saved&&saved.slot===CR.slotIndex(FILE.period)){const ok=await tryCode(saved.code,true);if(!ok)store.del("view")}
