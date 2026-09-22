@@ -319,6 +319,41 @@ img.cimg{width:44px;height:44px;object-fit:cover;border-radius:3px}
 .owner-edit{margin-top:18px;padding:14px;border:1.5px dashed var(--gold);border-radius:4px}
 .owner-edit h3{margin-top:0}
 .file-btn{display:inline-flex;align-items:center;cursor:pointer}
+.owner-edit .oe-fields{grid-template-columns:repeat(2,minmax(0,180px));border:0;padding-top:0;margin:4px 0 12px}
+/* chủ shop sửa trực tiếp trên thẻ */
+.item.editing{gap:10px}
+.item.editing .thumb-btn,.item.editing .thumb-btn:has(img.thumb:not([hidden])){width:100%;height:120px;display:flex;align-items:center;justify-content:center;background:var(--bg);border:1px solid var(--line);border-radius:4px;overflow:hidden}
+.item.editing img.thumb{width:100%;height:100%;object-fit:contain;border-radius:0}
+.item.editing .thumb-btn .shape{width:54px;height:54px}
+.item.editing .iso{top:22px;right:22px}
+.item.changed{box-shadow:inset 4px 0 0 var(--gold)}
+.item.drop,.dimg.drop{outline:3px dashed var(--gold);outline-offset:-6px}
+.oe-img-act{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.oe-btn{font:600 13px var(--body);padding:5px 10px;border:1.5px solid var(--steel);color:var(--steel);background:none;border-radius:4px;cursor:pointer;white-space:nowrap}
+.oe-btn.danger{border-color:var(--K);color:var(--K)}
+.oe-btn:disabled{opacity:.5;cursor:default}
+.oe-busy{font-size:13px;font-weight:600;color:var(--gold)}
+.oe-fields{display:grid;grid-template-columns:minmax(0,1fr);gap:8px;margin-top:auto;padding-top:10px;border-top:1px dashed var(--line)}
+.oe-f{display:grid;gap:3px;min-width:0}
+.oe-l{font-size:12px;font-weight:600;color:var(--muted)}
+.oe-step{display:flex;width:100%}
+.oe-step input{flex:1;width:auto;min-width:0}
+.oe-price{display:flex;align-items:center;border:1.5px solid var(--line);border-radius:4px;background:var(--bg)}
+.oe-price:focus-within{border-color:var(--steel)}
+.oe-price input{flex:1;min-width:0;width:100%;border:0;background:none;color:var(--ink);font:600 15px var(--body);padding:6px 8px;outline:none}
+.oe-price span{padding-right:8px;color:var(--muted);font-size:14px}
+.oe-f small{font-size:12px;color:var(--muted)}
+.oe-f small .linklike{margin-left:0;font-size:12px}
+.owner-bar{position:fixed;left:0;right:0;bottom:0;z-index:40;background:var(--panel);border-top:2px solid var(--gold);padding-bottom:env(safe-area-inset-bottom,0px);box-shadow:0 -6px 20px rgba(0,0,0,.12)}
+.ob-in{display:flex;align-items:center;gap:10px 14px;flex-wrap:wrap;min-height:60px;padding-top:8px;padding-bottom:8px}
+.ob-status{font-size:14px;color:var(--muted);margin-right:auto}
+.ob-status.dirty{color:var(--S);font-weight:600}
+.owner-bar .primary{width:auto;margin:0;padding:10px 18px}
+body.owner{padding-bottom:84px}
+.ob-sm{display:none}
+body.owner .toast{bottom:calc(env(safe-area-inset-bottom,0px) + 110px)}
+@media (max-width:720px){.ob-lg,#ownerBtn{display:none}.ob-sm{display:inline}button.ob-sm{display:inline-block;margin-left:auto}}
+@media (max-width:560px){.item.editing .thumb-btn,.item.editing .thumb-btn:has(img.thumb:not([hidden])){height:96px}.owner-edit .oe-fields{grid-template-columns:1fr 1fr}.ob-in{gap:6px 10px}.ob-status{order:3;width:100%;margin:0;font-size:13px}.owner-bar .primary{padding:9px 14px}}
 @media (max-width:600px){.dgrid{grid-template-columns:1fr}.dimg{max-width:240px}.dcode{font-size:28px}}
 </style>
 </head>
@@ -569,6 +604,17 @@ img.cimg{width:44px;height:44px;object-fit:cover;border-radius:3px}
   </div>
 </div>
 
+<!-- Thanh công cụ chủ shop -->
+<div class="owner-bar" id="ownerBar" hidden>
+  <div class="wrap ob-in">
+    <label class="check"><input type="checkbox" id="obEdit"> <span class="ob-lg">Sửa ảnh, giá, số lượng trên trang</span><span class="ob-sm">Chế độ sửa</span></label>
+    <span class="ob-status" id="obStatus" aria-live="polite"></span>
+    <button class="add ob-sm" id="obAdmin">Quản lý</button>
+    <button class="primary" id="obSave">Lưu lên web</button>
+  </div>
+</div>
+<input type="file" accept="image/*" id="oeFile" hidden>
+
 <div class="toast" id="toast" role="status"></div>
 <script>
 /* Mã hoá dữ liệu: PBKDF2-SHA256 + AES-GCM (WebCrypto) */
@@ -750,9 +796,10 @@ function initApp(){
   $("#brands").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;st.brand=b.dataset.b;st.cat="all";st.iso.clear();render();$("#san-pham").scrollIntoView()});
   $("#grid").addEventListener("click",e=>{
     const op=e.target.closest("[data-open]");if(op){openDetail(op.dataset.open);return}
+    if(ownerClick(e))return;
     if(e.target.id==="reset"){st.q="";$("#q").value="";st.cat="all";st.brand="";st.iso.clear();st.inStock=false;$("#inStock").checked=false;render();return}
     qtyClick(e)});
-  $("#grid").addEventListener("change",qtyInput);
+  $("#grid").addEventListener("change",e=>{if(!ownerChange(e))qtyInput(e)});
   initCart();
 }
 function priceHTML(d){
@@ -769,6 +816,33 @@ const norm=s=>s.toUpperCase().replace(/[\s\-\.]/g,"");
 function filtered(ignoreCat){const q=norm(st.q);return DATA.filter(d=>(!q||norm(d.code).includes(q)||norm(d.brand).includes(q))&&(ignoreCat||st.cat==="all"||d.cat===st.cat)&&(!st.brand||d.brand===st.brand)&&(!st.inStock||d.qty>0)&&[...st.iso].every(k=>d.iso.includes(k)))}
 const stockRank=d=>d.qty>0?0:d.qty==null?1:2;
 function stepper(d,n){return `<div class="stepper" role="group" aria-label="Số lượng ${esc(d.code)}"><button data-dec="${d.id}" aria-label="Giảm">−</button><input type="number" min="0" max="${maxQty(d)}" value="${n}" data-set="${d.id}" inputmode="numeric" aria-label="Số lượng"><button data-inc="${d.id}" aria-label="Tăng" ${n>=maxQty(d)?"disabled":""}>+</button></div>`}
+const editing=()=>admin.on&&admin.edit;
+function cardHTML(d){
+  const out=d.qty!=null&&d.qty<=0,n=cart[d.id]||0,ed=editing();
+  const iso=`<div class="iso">${d.iso.map(k=>`<span style="--c:var(--${k})" title="${ISO[k][0]}">${k}</span>`).join("")}</div>`;
+  const thumb=`<button class="thumb-btn" data-open="${d.id}" aria-label="Xem chi tiết ${esc(d.code)}">${imgTag(d,"thumb")}</button>`;
+  const info=`<div><div class="brand">${esc(d.brand)}</div><button class="code linkbtn" data-open="${d.id}">${esc(d.code)}</button><div class="cat">${CATS[d.cat]}</div>${stockHTML(d)}</div>`;
+  if(ed)return `<article class="item editing${out?" soldout":""}${admin.changed.has(d.id)?" changed":""}" data-drop="${d.id}">
+    ${iso}${thumb}<div class="oe-img-act">${imgButtons(d)}</div>${info}${ownerFields(d)}</article>`;
+  return `<article class="item${out?" soldout":""}">${iso}${thumb}${info}
+    <div class="foot">${priceHTML(d)}
+    ${n?stepper(d,n):`<button class="add" data-add="${d.id}" ${out?"disabled":""}>${out?"Hết hàng":"Thêm vào giỏ"}</button>`}</div></article>`;
+}
+/* các ô sửa của chủ shop (dùng chung cho thẻ sản phẩm và cửa sổ chi tiết) */
+function imgButtons(d){
+  if(admin.uploading.has(d.id))return '<span class="oe-busy">Đang tải ảnh lên…</span>';
+  return `<button class="oe-btn" data-oe-pick="${d.id}" data-fk="pick-${d.id}">${d.img?"Đổi ảnh":"+ Thêm ảnh"}</button>${d.img?`<button class="oe-btn danger" data-oe-del="${d.id}" data-fk="del-${d.id}">Xoá ảnh</button>`:""}`;
+}
+function ownerFields(d){
+  const sale=d.listPrice!=null&&d.listPrice!==d.price&&d.listPrice>0;
+  return `<div class="oe-fields">
+    <div class="oe-f"><span class="oe-l">Số lượng còn</span>
+      <div class="stepper oe-step"><button tabindex="-1" data-oe-qdec="${d.id}" data-fk="qd-${d.id}" aria-label="Giảm số lượng ${esc(d.code)}">−</button><input type="number" min="0" step="1" inputmode="numeric" data-oe="qty" data-i="${d.id}" data-fk="q-${d.id}" value="${d.qty??""}" placeholder="—" aria-label="Số lượng ${esc(d.code)}"><button tabindex="-1" data-oe-qinc="${d.id}" data-fk="qi-${d.id}" aria-label="Tăng số lượng ${esc(d.code)}">+</button></div></div>
+    <div class="oe-f"><span class="oe-l">Giá bán</span>
+      <div class="oe-price"><input type="text" inputmode="numeric" data-oe="price" data-i="${d.id}" data-fk="p-${d.id}" value="${fmtNum(d.price)}" placeholder="Báo giá khi đặt" aria-label="Giá bán ${esc(d.code)}"><span>₫</span></div>
+      ${sale?`<small>Giá gốc ${fmtNum(d.listPrice)} ₫ · <button class="linklike" data-oe-reset="${d.id}" data-fk="r-${d.id}">về giá gốc</button></small>`:""}</div>
+  </div>`;
+}
 function render(){
   brands=[...new Set(DATA.map(d=>d.brand))].sort((a,b)=>a==="Khác"?1:b==="Khác"?-1:a.localeCompare(b));
   $("#brand").innerHTML='<option value="">Tất cả hãng</option>'+brands.map(b=>`<option>${esc(b)}</option>`).join("");
@@ -779,12 +853,7 @@ function render(){
   const byBrand=(a,b)=>(brands.indexOf(a.brand)-brands.indexOf(b.brand))||a.code.localeCompare(b.code);
   list.sort((a,b)=>s==="code"?a.code.localeCompare(b.code):s==="pasc"?(a.price??1e12)-(b.price??1e12):s==="pdesc"?(b.price??-1)-(a.price??-1):s==="stock"?(stockRank(a)-stockRank(b))||byBrand(a,b):byBrand(a,b));
   $("#count").textContent=list.length+" mã";
-  $("#grid").innerHTML=list.length?list.map(d=>{const out=d.qty!=null&&d.qty<=0,n=cart[d.id]||0;return `<article class="item${out?" soldout":""}">
-    <div class="iso">${d.iso.map(k=>`<span style="--c:var(--${k})" title="${ISO[k][0]}">${k}</span>`).join("")}</div>
-    <button class="thumb-btn" data-open="${d.id}" aria-label="Xem chi tiết ${esc(d.code)}">${imgTag(d,"thumb")}</button>
-    <div><div class="brand">${esc(d.brand)}</div><button class="code linkbtn" data-open="${d.id}">${esc(d.code)}</button><div class="cat">${CATS[d.cat]}</div>${stockHTML(d)}</div>
-    <div class="foot">${priceHTML(d)}
-    ${n?stepper(d,n):`<button class="add" data-add="${d.id}" ${out?"disabled":""}>${out?"Hết hàng":"Thêm vào giỏ"}</button>`}</div></article>`}).join("")
+  $("#grid").innerHTML=list.length?list.map(cardHTML).join("")
   :`<div class="empty"><strong>Không có mã nào khớp.</strong><p class="sub" style="margin:4px 0 0">Thử bỏ bớt bộ lọc, hoặc gửi mã cho chúng tôi để tìm mã tương đương.</p><button class="add" id="reset">Xóa bộ lọc</button></div>`;
   $$("#isoChips button").forEach(b=>b.setAttribute("aria-pressed",st.iso.has(b.dataset.k)));
   $("#mats").innerHTML=Object.entries(ISO).map(([k,v])=>{const n=DATA.filter(d=>d.iso.includes(k)).length;return `<a href="#san-pham" class="mat" style="--c:var(--${k});text-decoration:none" data-k="${k}"><b>${k}</b><h3>${v[0]}</h3><p>${v[1]}</p><p style="margin-top:8px"><strong style="color:var(--ink)">${n} mã</strong> đã phân loại</p></a>`}).join("");
@@ -1038,7 +1107,8 @@ function productLinks(d){
 function imgTag(d,cls){
   const fb=d.cat==="phukien"?PART:shapeSVG(d.shape);
   if(!d.img)return fb;
-  return `<img class="${cls}" src="${esc(d.img)}" alt="Ảnh ${esc(d.code)}" loading="lazy" onerror="this.hidden=true;this.nextElementSibling.hidden=false"><span hidden>${fb}</span>`;
+  const src=admin.previews[d.img]||d.img;
+  return `<img class="${cls}" src="${esc(src)}" alt="Ảnh ${esc(d.code)}" loading="lazy" onerror="this.hidden=true;this.nextElementSibling.hidden=false"><span hidden>${fb}</span>`;
 }
 let detailId=null;
 function openDetail(id){
@@ -1059,47 +1129,39 @@ function openDetail(id){
   ${spec?`<table class="spec"><caption>${spec.system}, giải mã từ mã hàng</caption>${spec.rows.map(([k,v])=>`<tr><th>${k}</th><td>${esc(v)}</td></tr>`).join("")}</table>`:`<p class="sub">Mã này không theo ký hiệu ISO tiêu chuẩn. Xem thông số chính xác ở các liên kết bên dưới.</p>`}
   <h3>Hình ảnh và thông tin từ hãng</h3>
   <ul class="dlinks">${productLinks(d).map(([u,t])=>`<li><a href="${esc(u)}" target="_blank" rel="noopener">${t}</a></li>`).join("")}</ul>
-  ${p?`<div class="owner-edit"><h3>Ảnh và liên kết (chỉ chủ shop thấy)</h3>
+  ${p&&admin.edit?`<div class="owner-edit"><h3>Chỉnh sửa sản phẩm (chỉ chủ shop thấy)</h3>
+    ${ownerFields(d)}
+    <div class="oe-f"><span class="oe-l">Ảnh sản phẩm</span><div class="oe-img-act">${imgButtons(d)}</div></div>
+    <p class="sub small" style="margin:6px 0 14px">Có thể kéo thả ảnh vào khung ảnh bên trên. ${gh.token?"Ảnh được tải vào thư mục images của repo.":"Chưa cài GitHub token nên ảnh được thu nhỏ và lưu kèm dữ liệu."} Ảnh cũ bị đổi hoặc xoá sẽ được dọn khỏi repo khi bấm Lưu lên web.</p>
     <div class="form-grid">
-      <label>Link ảnh <input id="edImg" value="${esc(p.img||"")}" placeholder="https://… hoặc tải ảnh lên"></label>
+      <label>Hoặc dán link ảnh có sẵn <input id="edImg" value="${esc(imgLinkValue(p.img))}" data-init="${esc(imgLinkValue(p.img))}" placeholder="${p.img&&p.img.startsWith("data:")?"Đang dùng ảnh đã tải lên":"https://…"}"></label>
       <label>Link trang sản phẩm chính hãng <input id="edLink" value="${esc(p.link||"")}" placeholder="https://…"></label>
     </div>
-    <div class="ad-actions"><button class="add" data-edsave>Áp dụng</button><label class="add file-btn">Chụp / chọn ảnh để tải lên<input type="file" accept="image/*" id="edFile" hidden></label>${p.img?`<button class="add" data-edclear>Bỏ ảnh</button>`:""}</div>
-    <p class="sub small">Ảnh tải lên được lưu vào thư mục images của repo (cần GitHub token). Sau đó bấm Lưu lên web.</p></div>`:""}`;
+    <div class="ad-actions"><button class="add" data-edsave>Áp dụng liên kết</button></div></div>`:""}`;
   $("#detail").hidden=false;document.body.classList.add("noscroll");if(fresh)$("#detail").scrollTop=0;
 }
 function closeDetail(){$("#detail").hidden=true;detailId=null;if(!$("#drawer").classList.contains("open"))document.body.classList.remove("noscroll")}
 $("#detail").addEventListener("click",async e=>{
   if(e.target===$("#detail")||e.target.closest("[data-dclose]")){closeDetail();return}
   if(e.target.closest("[data-dcart]")){closeDetail();openSheet("cart");return}
+  if(ownerClick(e))return;
   qtyClick(e);
-  if(e.target.closest("[data-edsave]")){const p=admin.products[detailId];p.img=$("#edImg").value.trim()||undefined;p.link=$("#edLink").value.trim()||undefined;afterEdit();openDetail(detailId);toast("Đã áp dụng. Bấm Lưu lên web để khách thấy.")}
-  if(e.target.closest("[data-edclear]")){const p=admin.products[detailId];delete p.img;afterEdit();openDetail(detailId)}
+  if(e.target.closest("[data-edsave]")){const p=admin.products[detailId],inp=$("#edImg"),v=inp.value.trim();
+    if(v!==inp.dataset.init){trashImg(p.img);if(v)p.img=v;else delete p.img}
+    p.link=$("#edLink").value.trim()||undefined;markEdited(detailId);toast("Đã áp dụng. Bấm Lưu lên web để khách thấy.")}
 });
-$("#detail").addEventListener("change",async e=>{
-  qtyInput(e);
-  if(e.target.id!=="edFile"||!e.target.files[0])return;
-  if(!gh.token){toast("Cần GitHub token để tải ảnh lên. Hoặc dán link ảnh có sẵn.");return}
-  const id=detailId,file=e.target.files[0];
-  try{
-    toast("Đang tải ảnh lên…");
-    const bmp=await createImageBitmap(file),sc=Math.min(1,900/Math.max(bmp.width,bmp.height));
-    const c=document.createElement("canvas");c.width=Math.round(bmp.width*sc);c.height=Math.round(bmp.height*sc);
-    c.getContext("2d").drawImage(bmp,0,0,c.width,c.height);
-    const b64=c.toDataURL("image/jpeg",0.82).split(",")[1];
-    const path=`images/${norm(admin.products[id].code).toLowerCase().replace(/[^a-z0-9]/g,"")}-${id}-${Date.now().toString(36)}.jpg`;
-    await ghPut(path,b64,"Thêm ảnh "+admin.products[id].code);
-    admin.products[id].img=path;afterEdit();if(detailId===id)openDetail(id);
-    toast("Đã tải ảnh lên. Bấm Lưu lên web, ảnh hiện sau khoảng 1 phút.");
-  }catch(err){toast(err.message||"Tải ảnh không thành công")}
-});
+$("#detail").addEventListener("change",e=>{if(!ownerChange(e))qtyInput(e)});
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#detail").hidden)closeDetail()});
 /* ---------- khu vực chủ shop ---------- */
-const admin={on:false,mkRaw:null,msalt:"",miter:0,remember:false,codes:[],period:24,start:0,products:[],deducted:[],pub:{},dirty:false};
+const admin={on:false,edit:true,mkRaw:null,msalt:"",miter:0,remember:false,codes:[],period:24,start:0,products:[],deducted:[],pub:{},dirty:false,
+  changed:new Set(),uploading:new Set(),previews:{},trash:new Set()};
 const gh=Object.assign({owner:"Thanhcong6",repo:"chipcnc",branch:"main",token:""},store.get("gh",{}));
-function setDirty(v){admin.dirty=v;$("#dirty").textContent=v?"Có thay đổi chưa lưu":""}
+function setDirty(v){admin.dirty=v;$("#dirty").textContent=v?"Có thay đổi chưa lưu":"";
+  const n=admin.changed.size,ob=$("#obStatus");ob.classList.toggle("dirty",v);
+  ob.textContent=v?(n?`Đã sửa ${n} sản phẩm, chưa lưu lên web`:"Có thay đổi chưa lưu lên web"):"Mọi thay đổi đã được lưu";}
+window.addEventListener("beforeunload",e=>{if(admin.on&&admin.dirty){e.preventDefault();e.returnValue=""}});
 $("#openAdmin").addEventListener("click",()=>{$("#admin").hidden=false;(admin.on?$("#adBody button"):$("#adPass")).focus()});
-$("#closeAdmin").addEventListener("click",()=>{if(admin.dirty&&!confirm("Có thay đổi chưa lưu lên web. Vẫn đóng?"))return;$("#admin").hidden=true});
+$("#closeAdmin").addEventListener("click",()=>{$("#admin").hidden=true});
 function enterAdmin(res,raw,openPanel){
   Object.assign(admin,{on:true,mkRaw:raw,msalt:FILE.master.s,miter:FILE.master.iter,codes:res.codes,period:FILE.period,start:FILE.start,products:res.data.products.map(p=>({...p})),deducted:res.data.deducted||[],pub:{...PUB}});
   fillPubForm();
@@ -1108,7 +1170,9 @@ function enterAdmin(res,raw,openPanel){
   $("#periodSel").value=String(admin.period);
   renderCodes();renderStock();
   unlockedSlot=CR.slotIndex(FILE.period);showCatalog(res.data);
-  $("#expiry").textContent="Bạn đang xem với quyền chủ shop. Bấm vào tên sản phẩm để gắn ảnh và liên kết.";
+  admin.edit=store.get("ownerEdit",true);$("#obEdit").checked=admin.edit;
+  $("#ownerBar").hidden=false;document.body.classList.add("owner");setDirty(false);render();
+  $("#expiry").textContent="Bạn đang xem với quyền chủ shop: thêm, đổi, xoá ảnh và sửa giá, số lượng ngay trên từng sản phẩm, rồi bấm Lưu lên web ở thanh dưới cùng.";
   $("#ownerBtn").hidden=false;$("#openAdmin").textContent="Mở quản lý";$("#logoutBtn").hidden=false;
   if(!openPanel)$("#admin").hidden=true;
 }
@@ -1124,7 +1188,7 @@ $("#adLogin").addEventListener("submit",async e=>{
   if(admin.remember)toast("Đã ghi nhớ đăng nhập trên máy này");
 });
 $("#ownerBtn").addEventListener("click",()=>$("#openAdmin").click());
-$("#logoutBtn").addEventListener("click",()=>{if(admin.dirty&&!confirm("Có thay đổi chưa lưu lên web. Vẫn đăng xuất?"))return;store.del("owner");store.del("view");location.reload()});
+$("#logoutBtn").addEventListener("click",()=>{if(admin.dirty&&!confirm("Có thay đổi chưa lưu lên web. Vẫn đăng xuất?"))return;admin.dirty=false;store.del("owner");store.del("view");location.reload()});
 $("#adBody .ad-tabs").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;$$("#adBody .ad-tabs button").forEach(x=>x.setAttribute("aria-pressed",x===b));$$(".ad-pane").forEach(p=>p.hidden=p.dataset.p!==b.dataset.t)});
 
 /* mã theo thời gian */
@@ -1166,27 +1230,28 @@ function renderStock(){
   const rows=stockRows();
   $("#stCount").textContent=rows.length+" mã đang hiện";
   $("#stTable").innerHTML=rows.length?`<div class="st-row st-headrow"><span>Mã hàng</span><span>Số lượng</span><span>Giá bán (₫)</span></div>`+rows.map(({p,i})=>`<div class="st-row"><div><span class="code">${esc(p.code)}</span><small>${esc(p.brand)} · ${CATS[p.cat]}${p.listPrice&&p.listPrice!==p.price?` · giá gốc ${fmtNum(p.listPrice)} ₫`:""}</small></div>
-    <input type="number" min="0" step="1" inputmode="numeric" data-i="${i}" data-f="qty" value="${p.qty??""}" placeholder="—" aria-label="Số lượng ${esc(p.code)}">
-    <input type="text" inputmode="numeric" data-i="${i}" data-f="price" value="${fmtNum(p.price)}" placeholder="Liên hệ" aria-label="Giá bán ${esc(p.code)}"></div>`).join(""):'<p class="sub" style="padding:14px">Không có mã nào khớp.</p>';
+    <input type="number" min="0" step="1" inputmode="numeric" data-i="${i}" data-f="qty" value="${p.qty??""}" class="${admin.changed.has(i)?"changed":""}" placeholder="—" aria-label="Số lượng ${esc(p.code)}">
+    <input type="text" inputmode="numeric" data-i="${i}" data-f="price" value="${fmtNum(p.price)}" class="${admin.changed.has(i)?"changed":""}" placeholder="Liên hệ" aria-label="Giá bán ${esc(p.code)}"></div>`).join(""):'<p class="sub" style="padding:14px">Không có mã nào khớp.</p>';
 }
-function afterEdit(){setDirty(true);DATA=admin.products.map((d,i)=>({...d,id:i}));reconcileCart();render()}
+function syncData(){DATA=admin.products.map((d,i)=>({...d,id:i}));reconcileCart()}
+function afterEdit(){setDirty(true);syncData();render()}
 function setPrice(p,v){if(p.listPrice===undefined)p.listPrice=p.price??null;p.price=v}
 $("#stQ").addEventListener("input",renderStock);$("#stFilter").addEventListener("change",renderStock);
 $("#stTable").addEventListener("input",e=>{const inp=e.target.closest("input[data-i]");if(!inp)return;const p=admin.products[inp.dataset.i],v=inp.value.trim();
   if(inp.dataset.f==="qty")p.qty=v===""?null:Math.max(0,Math.floor(+v));
   else{const d=digits(v);setPrice(p,d?+d:null)}
-  inp.classList.add("changed");afterEdit()});
+  inp.classList.add("changed");admin.changed.add(+inp.dataset.i);afterEdit()});
 $("#stTable").addEventListener("focusout",e=>{const inp=e.target.closest('input[data-f="price"]');if(inp)inp.value=fmtNum(admin.products[inp.dataset.i].price)});
 $("#bulkQty").addEventListener("click",()=>{const v=$("#bulkQtyVal").value.trim();if(v===""){toast("Nhập số lượng muốn điền");return}
-  const n=Math.max(0,Math.floor(+v));let c=0;for(const {p} of stockRows())if(p.qty==null){p.qty=n;c++}
+  const n=Math.max(0,Math.floor(+v));let c=0;for(const {p,i} of stockRows())if(p.qty==null){p.qty=n;c++;admin.changed.add(i)}
   if(!c){toast("Không có mã nào đang để trống số lượng");return}renderStock();afterEdit();toast(`Đã điền ${n} cho ${c} mã`)});
 $("#bulkSale").addEventListener("click",()=>{const pct=+$("#bulkPct").value;if(!(pct>0&&pct<100)){toast("Nhập % giảm từ 1 đến 99");return}
   const rows=stockRows().filter(({p})=>(p.listPrice??p.price));if(!rows.length){toast("Các mã đang hiện chưa có giá");return}
   if(!confirm(`Giảm ${pct}% so với giá gốc cho ${rows.length} mã đang hiện?`))return;
-  for(const {p} of rows){const base=p.listPrice??p.price;setPrice(p,Math.round(base*(1-pct/100)/1000)*1000)}
+  for(const {p,i} of rows){const base=p.listPrice??p.price;setPrice(p,Math.round(base*(1-pct/100)/1000)*1000);admin.changed.add(i)}
   renderStock();afterEdit();toast(`Đã giảm ${pct}% cho ${rows.length} mã`)});
 $("#bulkReset").addEventListener("click",()=>{const rows=stockRows().filter(({p})=>p.listPrice!==undefined&&p.listPrice!==p.price);if(!rows.length){toast("Các mã đang hiện đều đang ở giá gốc");return}
-  if(!confirm(`Đưa ${rows.length} mã đang hiện về giá gốc?`))return;for(const {p} of rows)p.price=p.listPrice;renderStock();afterEdit();toast("Đã về giá gốc")});
+  if(!confirm(`Đưa ${rows.length} mã đang hiện về giá gốc?`))return;for(const {p,i} of rows){p.price=p.listPrice;admin.changed.add(i)}renderStock();afterEdit();toast("Đã về giá gốc")});
 
 /* cài đặt */
 $("#saveGh").addEventListener("click",()=>{["Owner","Repo","Branch","Token"].forEach(k=>gh[k.toLowerCase()]=$("#gh"+k).value.trim());store.set("gh",gh);toast("Đã lưu cài đặt GitHub trên trình duyệt này")});
@@ -1232,32 +1297,133 @@ $("#orderPreview").addEventListener("click",e=>{
 /* lưu */
 async function buildFile(){
   topUp();
-  const file=await CR.pack({products:admin.products,codes:admin.codes,period:admin.period,start:admin.start,masterRaw:admin.mkRaw,masterSalt:admin.msalt,masterIter:admin.miter,pub:admin.pub,extra:{deducted:admin.deducted.slice(-300)},onProgress:f=>{$("#saveWeb").textContent="Đang mã hoá… "+Math.round(f*100)+"%"}});
+  const file=await CR.pack({products:admin.products,codes:admin.codes,period:admin.period,start:admin.start,masterRaw:admin.mkRaw,masterSalt:admin.msalt,masterIter:admin.miter,pub:admin.pub,extra:{deducted:admin.deducted.slice(-300)},onProgress:f=>saveLabel("Đang mã hoá… "+Math.round(f*100)+"%")});
   return JSON.stringify(file);
 }
-function busy(on){$("#saveWeb").disabled=$("#dlData").disabled=on;$("#saveWeb").textContent=on?"Đang mã hoá… 0%":"Lưu lên web"}
+function saveLabel(t){$("#saveWeb").textContent=$("#obSave").textContent=t}
+function busy(on){$("#saveWeb").disabled=$("#dlData").disabled=$("#obSave").disabled=on;saveLabel(on?"Đang mã hoá… 0%":"Lưu lên web")}
 $("#dlData").addEventListener("click",async()=>{busy(true);try{const txt=await buildFile();
   const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([txt],{type:"application/json"}));a.download="data.json";a.click();
   toast("Đã tải data.json. Tải file này lên repo để cập nhật web.");afterSaved(txt)}finally{busy(false)}});
+function ghReq(path){return{url:`https://api.github.com/repos/${gh.owner}/${gh.repo}/contents/${path}`,h:{Authorization:"Bearer "+gh.token,Accept:"application/vnd.github+json"}}}
+async function ghSha(path){
+  const {url,h}=ghReq(path);const r=await fetch(url+"?ref="+encodeURIComponent(gh.branch)+"&t="+Date.now(),{headers:h,cache:"no-store"});
+  if(r.ok)return (await r.json()).sha;if(r.status===401)throw new Error("Token sai hoặc đã hết hạn.");if(r.status!==404)throw new Error("Không đọc được repo (mã lỗi "+r.status+"). Kiểm tra tên tài khoản, repo và quyền của token.");
+  return null;
+}
 async function ghPut(path,b64,message){
-  const url=`https://api.github.com/repos/${gh.owner}/${gh.repo}/contents/${path}`;
-  const h={Authorization:"Bearer "+gh.token,Accept:"application/vnd.github+json"};
-  let sha;const r=await fetch(url+"?ref="+encodeURIComponent(gh.branch)+"&t="+Date.now(),{headers:h,cache:"no-store"});
-  if(r.ok)sha=(await r.json()).sha;else if(r.status===401)throw new Error("Token sai hoặc đã hết hạn.");else if(r.status!==404)throw new Error("Không đọc được repo (mã lỗi "+r.status+"). Kiểm tra tên tài khoản, repo và quyền của token.");
+  const {url,h}=ghReq(path),sha=await ghSha(path);
   const body={message,content:b64,branch:gh.branch};if(sha)body.sha=sha;
   const p=await fetch(url,{method:"PUT",headers:h,body:JSON.stringify(body)});
   if(!p.ok)throw new Error(p.status===403||p.status===404?"Token không có quyền ghi vào repo (cần quyền Contents: Read and write).":"GitHub báo lỗi "+p.status+".");
 }
-function afterSaved(txt){FILE=JSON.parse(txt);setDirty(false);renderCodes();$$("#stTable input.changed").forEach(x=>x.classList.remove("changed"));rememberOwner()}
-$("#saveWeb").addEventListener("click",async()=>{
-  if(!gh.token){toast("Chưa có GitHub token. Vào Cài đặt, hoặc dùng Tải file data.json.");$('#adBody .ad-tabs button[data-t="settings"]').click();return}
+async function ghDelete(path,message){
+  const {url,h}=ghReq(path),sha=await ghSha(path);if(!sha)return;
+  await fetch(url,{method:"DELETE",headers:h,body:JSON.stringify({message,sha,branch:gh.branch})});
+}
+/* dọn ảnh cũ trong repo sau khi dữ liệu mới đã lên web */
+async function purgeTrash(){
+  let n=0;
+  for(const path of [...admin.trash]){
+    if(admin.products.some(p=>p.img===path)){admin.trash.delete(path);continue}
+    try{await ghDelete(path,"Xoá ảnh không dùng "+path);admin.trash.delete(path);n++}catch(e){}
+  }
+  return n;
+}
+function afterSaved(txt){FILE=JSON.parse(txt);admin.changed.clear();setDirty(false);renderCodes();renderStock();render();if(detailId!=null)openDetail(detailId);rememberOwner()}
+async function saveToWeb(){
+  if(!gh.token){toast("Chưa có GitHub token. Vào Cài đặt, hoặc dùng Tải file data.json.");$("#admin").hidden=false;$('#adBody .ad-tabs button[data-t="settings"]').click();return}
+  if(admin.uploading.size){toast("Đợi ảnh tải lên xong rồi lưu");return}
   busy(true);
   try{
-    const txt=await buildFile();$("#saveWeb").textContent="Đang đăng…";
-    await ghPut("data.json",CR.b64(CR.enc.encode(txt)),"Cập nhật số lượng, giá và mã xem "+fmtTime(Date.now()));
-    afterSaved(txt);toast("Đã lưu. Web cập nhật sau khoảng 1 phút.");
+    const txt=await buildFile();saveLabel("Đang đăng…");
+    await ghPut("data.json",CR.b64(CR.enc.encode(txt)),"Cập nhật số lượng, giá, ảnh và mã xem "+fmtTime(Date.now()));
+    afterSaved(txt);
+    if(admin.trash.size){saveLabel("Đang dọn ảnh cũ…");await purgeTrash()}
+    toast("Đã lưu. Web cập nhật sau khoảng 1 phút.");
   }catch(e){toast(e.message||"Lưu không thành công.")}finally{busy(false)}
-});
+}
+$("#saveWeb").addEventListener("click",saveToWeb);
+$("#obSave").addEventListener("click",saveToWeb);
+$("#obAdmin").addEventListener("click",()=>$("#openAdmin").click());
+
+/* ---------- chủ shop sửa trực tiếp trên trang ---------- */
+const imgLinkValue=img=>img&&!String(img).startsWith("data:")?img:"";
+function markEdited(i){admin.changed.add(+i);setDirty(true);syncData();redraw()}
+let rfT;
+function redraw(){clearTimeout(rfT);rfT=setTimeout(()=>keepFocus(()=>{render();if(detailId!=null)openDetail(detailId);if(admin.on)renderStock()}),0)}
+/* giữ con trỏ ở đúng ô sau khi vẽ lại (VD: bấm Tab từ ô số lượng sang ô giá) */
+function keepFocus(fn){
+  const a=document.activeElement,fk=a&&a.dataset?a.dataset.fk:null,inD=!!(fk&&a.closest("#detail"));
+  fn();
+  if(!fk)return;const el=document.querySelector(`${inD?"#detail":"#grid"} [data-fk="${fk}"]`);
+  if(el){el.focus({preventScroll:true});if(el.tagName==="INPUT"&&el.select)el.select()}
+}
+function ownerSet(i,f,v){
+  const p=admin.products[i];if(!p)return;
+  if(f==="qty"){const str=String(v).trim(),n=str===""?null:Math.max(0,Math.floor(+str));
+    if(n!==null&&!Number.isFinite(n)||p.qty===n){redraw();return}p.qty=n}
+  else{const d=digits(v),n=d?+d:null;if((p.price??null)===n){redraw();return}setPrice(p,n)}
+  markEdited(i);
+}
+function ownerChange(e){const t=e.target.closest("input[data-oe]");if(!t||!admin.on)return false;ownerSet(+t.dataset.i,t.dataset.oe,t.value);return true}
+function ownerClick(e){
+  if(!admin.on)return false;
+  const t=e.target.closest("[data-oe-pick],[data-oe-del],[data-oe-qinc],[data-oe-qdec],[data-oe-reset]");if(!t||t.disabled)return false;
+  const ds=t.dataset;
+  if(ds.oePick!=null)pickImage(+ds.oePick);
+  else if(ds.oeDel!=null)removeImage(+ds.oeDel);
+  else if(ds.oeQinc!=null){const i=+ds.oeQinc;ownerSet(i,"qty",(admin.products[i].qty??0)+1)}
+  else if(ds.oeQdec!=null){const i=+ds.oeQdec;ownerSet(i,"qty",Math.max(0,(admin.products[i].qty??0)-1))}
+  else if(ds.oeReset!=null){const i=+ds.oeReset,p=admin.products[i];p.price=p.listPrice;markEdited(i)}
+  return true;
+}
+/* ảnh sản phẩm */
+function trashImg(path){if(path&&/^images\//.test(path))admin.trash.add(path)}
+let pickId=null;
+function pickImage(id){pickId=id;const f=$("#oeFile");f.value="";f.click()}
+$("#oeFile").addEventListener("change",e=>{const f=e.target.files[0];if(f&&pickId!=null)uploadImage(pickId,f);pickId=null});
+async function resizeImage(file,max,q){
+  let src,w,h;
+  try{src=await createImageBitmap(file);w=src.width;h=src.height}
+  catch(e){src=await new Promise((res,rej)=>{const im=new Image();im.onload=()=>res(im);im.onerror=()=>rej(new Error("Trình duyệt không đọc được ảnh này. Hãy chọn ảnh JPG hoặc PNG."));im.src=URL.createObjectURL(file)});w=src.naturalWidth;h=src.naturalHeight}
+  const sc=Math.min(1,max/Math.max(w,h)),c=document.createElement("canvas");c.width=Math.max(1,Math.round(w*sc));c.height=Math.max(1,Math.round(h*sc));
+  const x=c.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,c.width,c.height);x.drawImage(src,0,0,c.width,c.height);
+  return c.toDataURL("image/jpeg",q);
+}
+async function uploadImage(id,file){
+  const p=admin.products[id];if(!p||admin.uploading.has(id))return;
+  if(!/^image\//.test(file.type)&&!/\.(jpe?g|png|webp|gif|heic|heif)$/i.test(file.name)){toast("File này không phải ảnh");return}
+  if(file.size>25e6){toast("Ảnh quá lớn (trên 25 MB)");return}
+  admin.uploading.add(id);redraw();
+  try{
+    const useGh=!!gh.token,had=!!p.img;
+    const url=await resizeImage(file,useGh?1000:520,useGh?.82:.72);
+    let src=url;
+    if(useGh){
+      const slug=norm(p.code).toLowerCase().replace(/[^a-z0-9]/g,"")||"sp";
+      src=`images/${slug}-${id}-${Date.now().toString(36)}.jpg`;
+      await ghPut(src,url.split(",")[1],(had?"Đổi ảnh ":"Thêm ảnh ")+p.code);
+      admin.previews[src]=url;
+    }
+    trashImg(p.img);p.img=src;admin.uploading.delete(id);markEdited(id);
+    toast((had?"Đã đổi ảnh ":"Đã thêm ảnh ")+p.code+(useGh?". Bấm Lưu lên web để khách thấy.":" (lưu kèm dữ liệu vì chưa có GitHub token). Bấm Lưu lên web."));
+  }catch(err){toast(err.message||"Tải ảnh không thành công")}
+  finally{admin.uploading.delete(id);redraw()}
+}
+function removeImage(id){
+  const p=admin.products[id];if(!p||!p.img)return;
+  if(!confirm(`Xoá ảnh của ${p.code}?`))return;
+  trashImg(p.img);delete p.img;markEdited(id);toast("Đã xoá ảnh "+p.code+". Bấm Lưu lên web để áp dụng.");
+}
+for(const box of [$("#grid"),$("#detail")]){
+  box.addEventListener("keydown",e=>{if(e.key==="Enter"&&e.target.matches("input[data-oe]")){e.preventDefault();e.target.blur()}});
+  box.addEventListener("dragover",e=>{const z=editing()&&e.target.closest("[data-drop],#detail .dimg");if(!z||![...e.dataTransfer.types].includes("Files"))return;e.preventDefault();z.classList.add("drop")});
+  box.addEventListener("dragleave",e=>{const z=e.target.closest(".drop");if(z&&!z.contains(e.relatedTarget))z.classList.remove("drop")});
+  box.addEventListener("drop",e=>{const z=editing()&&e.target.closest("[data-drop],#detail .dimg");if(!z)return;e.preventDefault();z.classList.remove("drop");
+    const f=e.dataTransfer.files[0],id=z.dataset.drop!=null?+z.dataset.drop:detailId;if(f&&id!=null)uploadImage(id,f)});
+}
+$("#obEdit").addEventListener("change",e=>{admin.edit=e.target.checked;store.set("ownerEdit",admin.edit);render();if(detailId!=null)openDetail(detailId)});
 
 /* ---------- khởi động ---------- */
 (async()=>{
