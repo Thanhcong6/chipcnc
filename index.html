@@ -354,6 +354,57 @@ body.owner{padding-bottom:84px}
 body.owner .toast{bottom:calc(env(safe-area-inset-bottom,0px) + 110px)}
 @media (max-width:720px){.ob-lg,#ownerBtn{display:none}.ob-sm{display:inline}button.ob-sm{display:inline-block;margin-left:auto}}
 @media (max-width:560px){.item.editing .thumb-btn,.item.editing .thumb-btn:has(img.thumb:not([hidden])){height:96px}.owner-edit .oe-fields{grid-template-columns:1fr 1fr}.ob-in{gap:6px 10px}.ob-status{order:3;width:100%;margin:0;font-size:13px}.owner-bar .primary{padding:9px 14px}}
+/* nhiều ảnh */
+.thumb-btn{position:relative}
+.nimg{position:absolute;right:2px;bottom:2px;background:rgba(21,33,44,.8);color:#fff;font:600 10.5px/1 var(--body);padding:3px 5px;border-radius:3px}
+.oe-gal{display:flex;flex-wrap:wrap;gap:8px 6px;align-items:center}
+.mini{position:relative;width:40px;height:40px;flex-shrink:0}
+.mini-img{width:40px;height:40px;padding:0;border:1.5px solid var(--line);border-radius:3px;overflow:hidden;background:#fff;cursor:pointer;display:block}
+.mini.main .mini-img{border:2px solid var(--gold)}
+.mini-img img{width:100%;height:100%;object-fit:cover;display:block}
+.mini-x{position:absolute;top:-7px;right:-7px;width:20px;height:20px;border-radius:50%;border:2px solid var(--panel);background:var(--K);color:#fff;font:700 12px/1 var(--body);cursor:pointer;padding:0;display:flex;align-items:center;justify-content:center}
+.oe-editinfo{margin:4px 0 0!important;font-size:13px!important}
+.dgal .dthumbs{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.dthumbs button{width:52px;height:52px;padding:0;border:1.5px solid var(--line);border-radius:3px;overflow:hidden;background:#fff;cursor:pointer}
+.dthumbs button[aria-pressed="true"]{border:2px solid var(--gold)}
+.dthumbs img{width:100%;height:100%;object-fit:cover;display:block}
+.ge{display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:10px;margin:6px 0 10px}
+.ge-item{margin:0;border:1px solid var(--line);border-radius:4px;background:var(--panel);overflow:hidden;display:grid}
+.ge-img{aspect-ratio:1;border:0;padding:0;background:#fff;cursor:pointer;position:relative;display:block;width:100%}
+.ge-img img{width:100%;height:100%;object-fit:contain;display:block}
+.ge-main{position:absolute;left:4px;top:4px;background:var(--gold);color:#fff;font:600 11px var(--body);padding:1px 6px;border-radius:3px}
+.ge-act{display:flex;border-top:1px solid var(--line)}
+.ge-act button{flex:1;background:none;border:0;border-right:1px solid var(--line);padding:7px 0;font:600 12px var(--body);color:var(--steel);cursor:pointer}
+.ge-act button:last-child{border-right:0}
+.ge-act button:disabled{opacity:.35;cursor:default}
+.ge-act .danger{color:var(--K)}
+.ge-add{aspect-ratio:1;border:1.5px dashed var(--steel);background:none;color:var(--steel);border-radius:4px;font:600 14px var(--body);cursor:pointer;display:grid;place-content:center;gap:4px;text-align:center;padding:6px;min-height:112px}
+.drop.ge,#pfImgs.drop{outline:3px dashed var(--gold);outline-offset:4px}
+.ge-add small{font-weight:500;color:var(--muted);font-size:11.5px}
+.ge-add:disabled{opacity:.5;cursor:default}
+.ge-link{display:flex;gap:6px;max-width:520px}
+.ge-link input{flex:1;min-width:0;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:4px;padding:7px 10px;font:500 14px var(--body)}
+/* thêm / sửa mã */
+.add-card{border:0;cursor:pointer;align-items:center;justify-content:center;text-align:center;color:var(--steel);font:600 16px var(--body);outline:2px dashed var(--steel);outline-offset:-12px}
+.add-card b{font:600 48px/1 var(--display)}
+.add-card small{color:var(--muted);font-weight:500;font-size:13px;max-width:18ch}
+.add-card:hover{background:var(--bg)}
+.pf-box{width:min(680px,100%)}
+.form-grid .full{grid-column:1/-1}
+.form-grid select,.form-grid textarea{width:100%;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:4px;padding:8px 10px;font:500 16px var(--body)}
+.form-grid textarea{min-height:150px;font:500 15px/1.5 ui-monospace,Menlo,Consolas,monospace;resize:vertical}
+.pf-sec{margin:16px 0 6px;font-size:14px;font-weight:600}
+.iso-pick{display:flex;flex-wrap:wrap;gap:6px}
+.iso-pick label{position:relative;display:flex;align-items:center;gap:6px;border:2px solid var(--c);border-radius:4px;padding:5px 10px;cursor:pointer;font-size:14px;font-weight:600}
+.iso-pick label b{font-family:var(--display);font-size:17px}
+.iso-pick label:has(input:checked){background:var(--c);color:#fff}
+.iso-pick label:has(input:focus-visible){outline:3px solid var(--gold);outline-offset:2px}
+.iso-pick input{position:absolute;opacity:0;pointer-events:none}
+.pf-foot{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:18px;padding-top:14px;border-top:1px solid var(--line)}
+.pf-foot .primary{width:auto;margin:0 0 0 auto;padding:10px 20px}
+.add.danger{border-color:var(--K);color:var(--K)}
+.item.flash{animation:flash 1.6s ease-out}
+@keyframes flash{0%,40%{background:var(--gold-soft)}100%{background:var(--panel)}}
 @media (max-width:600px){.dgrid{grid-template-columns:1fr}.dimg{max-width:240px}.dcode{font-size:28px}}
 </style>
 </head>
@@ -542,6 +593,7 @@ body.owner .toast{bottom:calc(env(safe-area-inset-bottom,0px) + 110px)}
       <div class="ad-pane" data-p="stock" hidden>
         <div class="row">
           <label class="search"><input id="stQ" type="search" placeholder="Tìm mã hoặc hãng" aria-label="Tìm mã để sửa"></label>
+          <button class="add" id="stNew">+ Thêm mã mới</button>
           <select id="stFilter" aria-label="Lọc">
             <option value="all">Tất cả</option>
             <option value="none">Chưa nhập số lượng</option>
@@ -549,9 +601,10 @@ body.owner .toast{bottom:calc(env(safe-area-inset-bottom,0px) + 110px)}
             <option value="in">Còn hàng</option>
             <option value="noprice">Chưa có giá</option>
             <option value="sale">Đang giảm giá</option>
+            <option value="noimg">Chưa có ảnh</option>
           </select>
         </div>
-        <p class="sub small" style="margin:8px 0">Số lượng để trống là chưa cập nhật, nhập 0 là hết hàng. Giá để trống sẽ hiện "Báo giá khi đặt". Khi đổi giá, giá cũ được giữ làm giá gốc và hiện gạch ngang trên web. <b id="stCount"></b></p>
+        <p class="sub small" style="margin:8px 0">Số lượng để trống là chưa cập nhật, nhập 0 là hết hàng. Giá để trống sẽ hiện "Báo giá khi đặt". Khi đổi giá, giá cũ được giữ làm giá gốc và hiện gạch ngang trên web. Bấm vào tên mã để sửa thông tin hoặc xoá mã. <b id="stCount"></b></p>
         <div class="bulk">
           <div><label for="bulkQtyVal">Điền số lượng cho các mã đang trống</label><div class="bulk-row"><input id="bulkQtyVal" type="number" min="0" inputmode="numeric" placeholder="VD: 1"><button class="add" id="bulkQty">Điền</button></div></div>
           <div><label for="bulkPct">Giảm giá các mã đang hiện (% so với giá gốc)</label><div class="bulk-row"><input id="bulkPct" type="number" min="1" max="99" inputmode="numeric" placeholder="VD: 20"><button class="add" id="bulkSale">Giảm giá</button><button class="add" id="bulkReset">Về giá gốc</button></div></div>
@@ -609,11 +662,17 @@ body.owner .toast{bottom:calc(env(safe-area-inset-bottom,0px) + 110px)}
   <div class="wrap ob-in">
     <label class="check"><input type="checkbox" id="obEdit"> <span class="ob-lg">Sửa ảnh, giá, số lượng trên trang</span><span class="ob-sm">Chế độ sửa</span></label>
     <span class="ob-status" id="obStatus" aria-live="polite"></span>
+    <button class="add ob-lg" id="obNew">+ Thêm mã mới</button>
     <button class="add ob-sm" id="obAdmin">Quản lý</button>
     <button class="primary" id="obSave">Lưu lên web</button>
   </div>
 </div>
 <input type="file" accept="image/*" id="oeFile" hidden>
+
+<!-- Thêm / sửa mã -->
+<div class="admin" id="pform" role="dialog" aria-modal="true" aria-labelledby="pfTitle" hidden>
+  <div class="admin-box pf-box" id="pformBox"></div>
+</div>
 
 <div class="toast" id="toast" role="status"></div>
 <script>
@@ -738,8 +797,10 @@ async function loadFile(){
 }
 
 /* ---------- mở khoá cho khách ---------- */
+/* dữ liệu cũ dùng "img" (1 ảnh) → chuyển sang "imgs" (nhiều ảnh) */
+function normP(p){const o={...p};if(!Array.isArray(o.imgs))o.imgs=o.img?[o.img]:[];delete o.img;if(!o.deleted&&!Array.isArray(o.iso))o.iso=[];return o}
 function showCatalog(data){
-  DATA=data.products.map((d,i)=>({...d,id:i}));UPDATED=data.updated;
+  DATA=data.products.map((d,i)=>({...normP(d),id:i}));UPDATED=data.updated;
   document.body.classList.add("unlocked");$("#lock").hidden=true;$("#app").hidden=false;
   if(!appReady){initApp();appReady=true}else{reconcileCart()}
   $("#updatedNote").textContent="Số lượng cập nhật lúc "+fmtTime(UPDATED)+". Giá niêm yết để tham khảo. Mã chưa có giá vẫn đặt được, shop sẽ báo giá khi xác nhận đơn.";
@@ -813,25 +874,41 @@ function stockHTML(d){
   return `<span class="stock${d.qty<=2?" low":""}">Còn ${d.qty} chiếc</span>`;
 }
 const norm=s=>s.toUpperCase().replace(/[\s\-\.]/g,"");
-function filtered(ignoreCat){const q=norm(st.q);return DATA.filter(d=>(!q||norm(d.code).includes(q)||norm(d.brand).includes(q))&&(ignoreCat||st.cat==="all"||d.cat===st.cat)&&(!st.brand||d.brand===st.brand)&&(!st.inStock||d.qty>0)&&[...st.iso].every(k=>d.iso.includes(k)))}
+const live=()=>DATA.filter(d=>!d.deleted);
+function filtered(ignoreCat){const q=norm(st.q);return DATA.filter(d=>!d.deleted&&(!q||norm(d.code).includes(q)||norm(d.brand).includes(q))&&(ignoreCat||st.cat==="all"||d.cat===st.cat)&&(!st.brand||d.brand===st.brand)&&(!st.inStock||d.qty>0)&&[...st.iso].every(k=>d.iso.includes(k)))}
 const stockRank=d=>d.qty>0?0:d.qty==null?1:2;
 function stepper(d,n){return `<div class="stepper" role="group" aria-label="Số lượng ${esc(d.code)}"><button data-dec="${d.id}" aria-label="Giảm">−</button><input type="number" min="0" max="${maxQty(d)}" value="${n}" data-set="${d.id}" inputmode="numeric" aria-label="Số lượng"><button data-inc="${d.id}" aria-label="Tăng" ${n>=maxQty(d)?"disabled":""}>+</button></div>`}
 const editing=()=>admin.on&&admin.edit;
+const imgSrc=path=>admin.previews[path]||path;
+const MAX_IMGS=()=>gh.token?10:4;
 function cardHTML(d){
-  const out=d.qty!=null&&d.qty<=0,n=cart[d.id]||0,ed=editing();
+  const out=d.qty!=null&&d.qty<=0,n=cart[d.id]||0,ed=editing(),ni=(d.imgs||[]).length;
   const iso=`<div class="iso">${d.iso.map(k=>`<span style="--c:var(--${k})" title="${ISO[k][0]}">${k}</span>`).join("")}</div>`;
-  const thumb=`<button class="thumb-btn" data-open="${d.id}" aria-label="Xem chi tiết ${esc(d.code)}">${imgTag(d,"thumb")}</button>`;
-  const info=`<div><div class="brand">${esc(d.brand)}</div><button class="code linkbtn" data-open="${d.id}">${esc(d.code)}</button><div class="cat">${CATS[d.cat]}</div>${stockHTML(d)}</div>`;
+  const thumb=`<button class="thumb-btn" data-open="${d.id}" aria-label="Xem chi tiết ${esc(d.code)}">${imgTag(d,"thumb")}${ni>1?`<span class="nimg">${ni} ảnh</span>`:""}</button>`;
+  const info=`<div><div class="brand">${esc(d.brand)}</div><button class="code linkbtn" data-open="${d.id}">${esc(d.code)}</button><div class="cat">${CATS[d.cat]||""}</div>${stockHTML(d)}</div>`;
   if(ed)return `<article class="item editing${out?" soldout":""}${admin.changed.has(d.id)?" changed":""}" data-drop="${d.id}">
-    ${iso}${thumb}<div class="oe-img-act">${imgButtons(d)}</div>${info}${ownerFields(d)}</article>`;
+    ${iso}${thumb}${cardGallery(d)}${info.replace(/<\/div>$/,`<button class="linklike oe-editinfo" data-oe-edit="${d.id}" data-fk="e-${d.id}">Sửa thông tin / xoá mã</button></div>`)}${ownerFields(d)}</article>`;
   return `<article class="item${out?" soldout":""}">${iso}${thumb}${info}
     <div class="foot">${priceHTML(d)}
     ${n?stepper(d,n):`<button class="add" data-add="${d.id}" ${out?"disabled":""}>${out?"Hết hàng":"Thêm vào giỏ"}</button>`}</div></article>`;
 }
-/* các ô sửa của chủ shop (dùng chung cho thẻ sản phẩm và cửa sổ chi tiết) */
-function imgButtons(d){
-  if(admin.uploading.has(d.id))return '<span class="oe-busy">Đang tải ảnh lên…</span>';
-  return `<button class="oe-btn" data-oe-pick="${d.id}" data-fk="pick-${d.id}">${d.img?"Đổi ảnh":"+ Thêm ảnh"}</button>${d.img?`<button class="oe-btn danger" data-oe-del="${d.id}" data-fk="del-${d.id}">Xoá ảnh</button>`:""}`;
+/* dải ảnh nhỏ trên thẻ: bấm ảnh để đặt làm ảnh chính, × để xoá */
+function cardGallery(d){
+  const imgs=d.imgs||[],busy=admin.uploading.get(d.id);
+  return `<div class="oe-gal">${imgs.map((src,k)=>`<span class="mini${k?"":" main"}"><button class="mini-img" data-oe-main="${d.id}:${k}" data-fk="m-${d.id}-${k}" title="${k?"Đặt làm ảnh chính":"Ảnh chính"}" aria-label="${k?`Đặt ảnh ${k+1} làm ảnh chính`:"Ảnh chính"}"><img src="${esc(imgSrc(src))}" alt="" loading="lazy"></button><button class="mini-x" data-oe-del="${d.id}:${k}" aria-label="Xoá ảnh ${k+1}" title="Xoá ảnh">×</button></span>`).join("")}
+    ${busy?`<span class="oe-busy">${esc(busy)}</span>`:imgs.length<MAX_IMGS()?`<button class="oe-btn" data-oe-pick="${d.id}" data-fk="pick-${d.id}">+ ${imgs.length?"Thêm":"Thêm ảnh"}</button>`:""}
+    ${imgs.length&&!busy?`<button class="oe-btn" data-open="${d.id}" title="Đổi, sắp xếp ảnh">Sửa ảnh</button>`:""}</div>`;
+}
+/* bộ sửa ảnh đầy đủ (cửa sổ chi tiết, form sửa mã) */
+function galleryEditor(d){
+  const imgs=d.imgs||[],busy=admin.uploading.get(d.id),max=MAX_IMGS();
+  return `<div class="ge">${imgs.map((src,k)=>`<figure class="ge-item">
+      <button class="ge-img" data-oe-main="${d.id}:${k}" data-fk="gm-${d.id}-${k}" title="${k?"Đặt làm ảnh chính":"Ảnh chính"}"><img src="${esc(imgSrc(src))}" alt="Ảnh ${k+1} của ${esc(d.code)}" loading="lazy">${k?"":'<span class="ge-main">Ảnh chính</span>'}</button>
+      <div class="ge-act"><button data-oe-left="${d.id}:${k}" ${k?"":"disabled"} aria-label="Chuyển ảnh ${k+1} lên trước" title="Chuyển lên trước">←</button><button data-oe-rep="${d.id}:${k}" ${busy?"disabled":""}>Đổi</button><button class="danger" data-oe-del="${d.id}:${k}">Xoá</button></div></figure>`).join("")}
+    ${busy?`<div class="ge-add" aria-live="polite"><span class="oe-busy">${esc(busy)}</span></div>`:imgs.length<max?`<button class="ge-add" data-oe-pick="${d.id}">+ Thêm ảnh<small>Chọn được nhiều ảnh một lần · còn ${max-imgs.length} chỗ</small></button>`:""}
+  </div>
+  <div class="ge-link"><input data-oe-linkin="${d.id}" placeholder="Hoặc dán link ảnh có sẵn (https://…)" aria-label="Link ảnh"><button class="oe-btn" data-oe-link="${d.id}">Thêm link</button></div>
+  <p class="sub small" style="margin:8px 0 0">Bấm vào ảnh để đặt làm ảnh chính (ảnh hiện trên danh mục). Có thể kéo thả nhiều ảnh vào đây. ${gh.token?`Tối đa ${max} ảnh mỗi mã, ảnh lưu trong thư mục images của repo.`:`Chưa cài GitHub token nên tối đa ${max} ảnh mỗi mã, ảnh được thu nhỏ và lưu kèm dữ liệu.`}</p>`;
 }
 function ownerFields(d){
   const sale=d.listPrice!=null&&d.listPrice!==d.price&&d.listPrice>0;
@@ -844,7 +921,7 @@ function ownerFields(d){
   </div>`;
 }
 function render(){
-  brands=[...new Set(DATA.map(d=>d.brand))].sort((a,b)=>a==="Khác"?1:b==="Khác"?-1:a.localeCompare(b));
+  brands=[...new Set(live().map(d=>d.brand))].sort((a,b)=>a==="Khác"?1:b==="Khác"?-1:a.localeCompare(b));
   $("#brand").innerHTML='<option value="">Tất cả hãng</option>'+brands.map(b=>`<option>${esc(b)}</option>`).join("");
   $("#brand").value=st.brand;
   const base=filtered(true);
@@ -853,11 +930,12 @@ function render(){
   const byBrand=(a,b)=>(brands.indexOf(a.brand)-brands.indexOf(b.brand))||a.code.localeCompare(b.code);
   list.sort((a,b)=>s==="code"?a.code.localeCompare(b.code):s==="pasc"?(a.price??1e12)-(b.price??1e12):s==="pdesc"?(b.price??-1)-(a.price??-1):s==="stock"?(stockRank(a)-stockRank(b))||byBrand(a,b):byBrand(a,b));
   $("#count").textContent=list.length+" mã";
-  $("#grid").innerHTML=list.length?list.map(cardHTML).join("")
-  :`<div class="empty"><strong>Không có mã nào khớp.</strong><p class="sub" style="margin:4px 0 0">Thử bỏ bớt bộ lọc, hoặc gửi mã cho chúng tôi để tìm mã tương đương.</p><button class="add" id="reset">Xóa bộ lọc</button></div>`;
+  const addCard=editing()?`<button class="item add-card" data-oe-new><b>+</b>Thêm mã mới<small>Một mã hoặc dán cả danh sách</small></button>`:"";
+  $("#grid").innerHTML=list.length?addCard+list.map(cardHTML).join("")
+  :`<div class="empty"><strong>Không có mã nào khớp.</strong><p class="sub" style="margin:4px 0 0">Thử bỏ bớt bộ lọc, hoặc gửi mã cho chúng tôi để tìm mã tương đương.</p><button class="add" id="reset">Xóa bộ lọc</button>${editing()?' <button class="add" data-oe-new>+ Thêm mã mới</button>':""}</div>`;
   $$("#isoChips button").forEach(b=>b.setAttribute("aria-pressed",st.iso.has(b.dataset.k)));
-  $("#mats").innerHTML=Object.entries(ISO).map(([k,v])=>{const n=DATA.filter(d=>d.iso.includes(k)).length;return `<a href="#san-pham" class="mat" style="--c:var(--${k});text-decoration:none" data-k="${k}"><b>${k}</b><h3>${v[0]}</h3><p>${v[1]}</p><p style="margin-top:8px"><strong style="color:var(--ink)">${n} mã</strong> đã phân loại</p></a>`}).join("");
-  $("#brands").innerHTML=brands.map(b=>`<button data-b="${esc(b)}">${esc(b)}<small>${DATA.filter(d=>d.brand===b&&d.qty!==0).length}</small></button>`).join("");
+  $("#mats").innerHTML=Object.entries(ISO).map(([k,v])=>{const n=live().filter(d=>d.iso.includes(k)).length;return `<a href="#san-pham" class="mat" style="--c:var(--${k});text-decoration:none" data-k="${k}"><b>${k}</b><h3>${v[0]}</h3><p>${v[1]}</p><p style="margin-top:8px"><strong style="color:var(--ink)">${n} mã</strong> đã phân loại</p></a>`}).join("");
+  $("#brands").innerHTML=brands.map(b=>`<button data-b="${esc(b)}">${esc(b)}<small>${live().filter(d=>d.brand===b&&d.qty!==0).length}</small></button>`).join("");
   updateCartBadge();
   if($("#drawer").classList.contains("open")&&(view==="cart"))renderSheet();
 }
@@ -867,7 +945,7 @@ let view="cart", notices=[], currentOrder=null;
 let orders=[];
 function saveCart(){store.set("cart",cart)}
 function setQty(id,n,silent){
-  const d=DATA[id];if(!d)return;n=Math.floor(+n||0);const m=maxQty(d);
+  const d=DATA[id];if(!d||d.deleted)return;n=Math.floor(+n||0);const m=maxQty(d);
   if(n>m){n=m;if(!silent)toast(m?`Chỉ còn ${m} chiếc ${d.code}`:`${d.code} đã hết hàng`)}
   if(n<=0)delete cart[id];else cart[id]=n;
   saveCart();render();if($("#drawer").classList.contains("open"))renderSheet();if(detailId!=null)openDetail(detailId);
@@ -880,14 +958,14 @@ function qtyClick(e){
   else if(t.dataset.rm!=null)setQty(t.dataset.rm,0);
 }
 function qtyInput(e){const t=e.target.closest("[data-set]");if(t)setQty(t.dataset.set,t.value)}
-function cartLines(){return Object.keys(cart).filter(id=>DATA[id]).map(id=>({d:DATA[id],n:cart[id]}))}
+function cartLines(){return Object.keys(cart).filter(id=>DATA[id]&&!DATA[id].deleted).map(id=>({d:DATA[id],n:cart[id]}))}
 function totals(lines){const priced=lines.filter(l=>l.d.price);return{items:lines.reduce((s,l)=>s+l.n,0),subtotal:priced.reduce((s,l)=>s+l.d.price*l.n,0),unpriced:lines.length-priced.length}}
 function updateCartBadge(){$("#cCount").textContent=Object.values(cart).reduce((s,n)=>s+n,0)}
 /* đối chiếu giỏ với tồn kho mới nhất */
 function reconcileCart(){
   notices=[];
   for(const id of Object.keys(cart)){const d=DATA[id];
-    if(!d){delete cart[id];continue}
+    if(!d||d.deleted){if(d)notices.push(`${d.code} đã ngừng bán, đã bỏ khỏi giỏ.`);delete cart[id];continue}
     const m=maxQty(d);if(cart[id]>m){notices.push(m?`${d.code}: chỉ còn ${m} chiếc, đã giảm số lượng trong giỏ.`:`${d.code} vừa hết hàng, đã bỏ khỏi giỏ.`);if(m)cart[id]=m;else delete cart[id]}}
   saveCart();
 }
@@ -1050,7 +1128,7 @@ async function sheetClick(e){
   if(t.dataset.go){view=t.dataset.go;renderSheet();return}
   if(t.hasAttribute("data-clear")){if(confirm("Xoá toàn bộ giỏ hàng?")){cart={};saveCart();render();renderSheet()}return}
   if(t.dataset.view!=null){currentOrder=orders[+t.dataset.view];view="done";renderSheet();return}
-  if(t.dataset.reorder!=null){let miss=0;for(const it of orders[+t.dataset.reorder].items){const d=DATA[it.id];if(!d||d.code!==it.code||maxQty(d)<=0){miss++;continue}cart[it.id]=Math.min(maxQty(d),(cart[it.id]||0)+it.qty)}
+  if(t.dataset.reorder!=null){let miss=0;for(const it of orders[+t.dataset.reorder].items){const d=DATA[it.id];if(!d||d.deleted||d.code!==it.code||maxQty(d)<=0){miss++;continue}cart[it.id]=Math.min(maxQty(d),(cart[it.id]||0)+it.qty)}
     saveCart();render();view="cart";renderSheet();toast(miss?`Đã thêm vào giỏ, ${miss} mã đã hết hàng`:"Đã thêm lại vào giỏ");return}
   const s=t.dataset.send;if(!s||!currentOrder)return;
   const txt=orderText(currentOrder);
@@ -1104,20 +1182,23 @@ function productLinks(d){
   L.push([gq(`${brand} ${d.code} insert catalog`.trim()),"Tìm catalog và thông số kỹ thuật"]);
   return L;
 }
-function imgTag(d,cls){
+function imgTag(d,cls,k=0){
   const fb=d.cat==="phukien"?PART:shapeSVG(d.shape);
-  if(!d.img)return fb;
-  const src=admin.previews[d.img]||d.img;
-  return `<img class="${cls}" src="${esc(src)}" alt="Ảnh ${esc(d.code)}" loading="lazy" onerror="this.hidden=true;this.nextElementSibling.hidden=false"><span hidden>${fb}</span>`;
+  const imgs=d.imgs||[],path=imgs[k]??imgs[0];
+  if(!path)return fb;
+  return `<img class="${cls}" src="${esc(imgSrc(path))}" alt="Ảnh ${esc(d.code)}" loading="lazy" onerror="this.hidden=true;this.nextElementSibling.hidden=false"><span hidden>${fb}</span>`;
 }
-let detailId=null;
+let detailId=null,galIdx=0;
 function openDetail(id){
-  const d=DATA[id];if(!d)return;const fresh=detailId!==+id;detailId=+id;
+  const d=DATA[id];if(!d||d.deleted){if(detailId===+id)closeDetail();return}
+  const fresh=detailId!==+id;detailId=+id;
+  const imgs=d.imgs||[];if(fresh)galIdx=0;galIdx=Math.max(0,Math.min(galIdx,imgs.length-1));
   const spec=decodeISO(d.code),n=cart[d.id]||0,out=d.qty!=null&&d.qty<=0;
-  const p=admin.on?admin.products[id]:null;
-  $("#detailBox").innerHTML=`<header class="ad-head"><div><small class="dmeta">${esc(d.brand)} · ${CATS[d.cat]}</small><h2 id="dTitle" class="dcode">${esc(d.code)}</h2></div><button class="close" data-dclose aria-label="Đóng">×</button></header>
+  const own=admin.on&&admin.edit&&admin.products[id];
+  $("#detailBox").innerHTML=`<header class="ad-head"><div><small class="dmeta">${esc(d.brand)} · ${CATS[d.cat]||""}</small><h2 id="dTitle" class="dcode">${esc(d.code)}</h2></div><button class="close" data-dclose aria-label="Đóng">×</button></header>
   <div class="dgrid">
-    <div class="dimg">${imgTag(d,"dphoto")}</div>
+    <div class="dgal"><div class="dimg">${imgTag(d,"dphoto",galIdx)}</div>
+      ${imgs.length>1?`<div class="dthumbs" role="group" aria-label="Chọn ảnh">${imgs.map((src,k)=>`<button data-gal="${k}" aria-pressed="${k===galIdx}" aria-label="Ảnh ${k+1}"><img src="${esc(imgSrc(src))}" alt="" loading="lazy"></button>`).join("")}</div>`:""}</div>
     <div class="dinfo">
       ${d.iso.length?`<div class="diso">${d.iso.map(k=>`<span style="--c:var(--${k})">${k} · ${ISO[k][0]}</span>`).join("")}</div>`:""}
       ${stockHTML(d)}
@@ -1125,36 +1206,30 @@ function openDetail(id){
       <div class="dbuy">${n?stepper(d,n)+`<button class="add" data-dcart>Xem giỏ hàng</button>`:`<button class="primary" data-add="${d.id}" ${out?"disabled":""}>${out?"Hết hàng":"Thêm vào giỏ"}</button>`}</div>
     </div>
   </div>
+  ${own?`<div class="owner-edit"><h3>Chỉnh sửa (chỉ chủ shop thấy)</h3>
+    ${ownerFields(d)}
+    <div class="pf-sec">Ảnh sản phẩm (${imgs.length})</div>
+    ${galleryEditor(d)}
+    <div class="ad-actions" style="margin-top:14px"><button class="add" data-oe-edit="${d.id}">Sửa thông tin mã, hãng, loại…</button></div></div>`:""}
   <h3>Thông số kỹ thuật</h3>
   ${spec?`<table class="spec"><caption>${spec.system}, giải mã từ mã hàng</caption>${spec.rows.map(([k,v])=>`<tr><th>${k}</th><td>${esc(v)}</td></tr>`).join("")}</table>`:`<p class="sub">Mã này không theo ký hiệu ISO tiêu chuẩn. Xem thông số chính xác ở các liên kết bên dưới.</p>`}
   <h3>Hình ảnh và thông tin từ hãng</h3>
-  <ul class="dlinks">${productLinks(d).map(([u,t])=>`<li><a href="${esc(u)}" target="_blank" rel="noopener">${t}</a></li>`).join("")}</ul>
-  ${p&&admin.edit?`<div class="owner-edit"><h3>Chỉnh sửa sản phẩm (chỉ chủ shop thấy)</h3>
-    ${ownerFields(d)}
-    <div class="oe-f"><span class="oe-l">Ảnh sản phẩm</span><div class="oe-img-act">${imgButtons(d)}</div></div>
-    <p class="sub small" style="margin:6px 0 14px">Có thể kéo thả ảnh vào khung ảnh bên trên. ${gh.token?"Ảnh được tải vào thư mục images của repo.":"Chưa cài GitHub token nên ảnh được thu nhỏ và lưu kèm dữ liệu."} Ảnh cũ bị đổi hoặc xoá sẽ được dọn khỏi repo khi bấm Lưu lên web.</p>
-    <div class="form-grid">
-      <label>Hoặc dán link ảnh có sẵn <input id="edImg" value="${esc(imgLinkValue(p.img))}" data-init="${esc(imgLinkValue(p.img))}" placeholder="${p.img&&p.img.startsWith("data:")?"Đang dùng ảnh đã tải lên":"https://…"}"></label>
-      <label>Link trang sản phẩm chính hãng <input id="edLink" value="${esc(p.link||"")}" placeholder="https://…"></label>
-    </div>
-    <div class="ad-actions"><button class="add" data-edsave>Áp dụng liên kết</button></div></div>`:""}`;
+  <ul class="dlinks">${productLinks(d).map(([u,t])=>`<li><a href="${esc(u)}" target="_blank" rel="noopener">${t}</a></li>`).join("")}</ul>`;
   $("#detail").hidden=false;document.body.classList.add("noscroll");if(fresh)$("#detail").scrollTop=0;
 }
 function closeDetail(){$("#detail").hidden=true;detailId=null;if(!$("#drawer").classList.contains("open"))document.body.classList.remove("noscroll")}
 $("#detail").addEventListener("click",async e=>{
   if(e.target===$("#detail")||e.target.closest("[data-dclose]")){closeDetail();return}
   if(e.target.closest("[data-dcart]")){closeDetail();openSheet("cart");return}
+  const g=e.target.closest("[data-gal]");if(g){galIdx=+g.dataset.gal;openDetail(detailId);return}
   if(ownerClick(e))return;
   qtyClick(e);
-  if(e.target.closest("[data-edsave]")){const p=admin.products[detailId],inp=$("#edImg"),v=inp.value.trim();
-    if(v!==inp.dataset.init){trashImg(p.img);if(v)p.img=v;else delete p.img}
-    p.link=$("#edLink").value.trim()||undefined;markEdited(detailId);toast("Đã áp dụng. Bấm Lưu lên web để khách thấy.")}
 });
 $("#detail").addEventListener("change",e=>{if(!ownerChange(e))qtyInput(e)});
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#detail").hidden)closeDetail()});
 /* ---------- khu vực chủ shop ---------- */
 const admin={on:false,edit:true,mkRaw:null,msalt:"",miter:0,remember:false,codes:[],period:24,start:0,products:[],deducted:[],pub:{},dirty:false,
-  changed:new Set(),uploading:new Set(),previews:{},trash:new Set()};
+  changed:new Set(),uploading:new Map(),previews:{},trash:new Set()};
 const gh=Object.assign({owner:"Thanhcong6",repo:"chipcnc",branch:"main",token:""},store.get("gh",{}));
 function setDirty(v){admin.dirty=v;$("#dirty").textContent=v?"Có thay đổi chưa lưu":"";
   const n=admin.changed.size,ob=$("#obStatus");ob.classList.toggle("dirty",v);
@@ -1163,7 +1238,7 @@ window.addEventListener("beforeunload",e=>{if(admin.on&&admin.dirty){e.preventDe
 $("#openAdmin").addEventListener("click",()=>{$("#admin").hidden=false;(admin.on?$("#adBody button"):$("#adPass")).focus()});
 $("#closeAdmin").addEventListener("click",()=>{$("#admin").hidden=true});
 function enterAdmin(res,raw,openPanel){
-  Object.assign(admin,{on:true,mkRaw:raw,msalt:FILE.master.s,miter:FILE.master.iter,codes:res.codes,period:FILE.period,start:FILE.start,products:res.data.products.map(p=>({...p})),deducted:res.data.deducted||[],pub:{...PUB}});
+  Object.assign(admin,{on:true,mkRaw:raw,msalt:FILE.master.s,miter:FILE.master.iter,codes:res.codes,period:FILE.period,start:FILE.start,products:res.data.products.map(normP),deducted:res.data.deducted||[],pub:{...PUB}});
   fillPubForm();
   $("#adLogin").hidden=true;$("#adBody").hidden=false;$("#adPass").value="";$("#adLoginMsg").textContent="";
   ["Owner","Repo","Branch","Token"].forEach(k=>$("#gh"+k).value=gh[k.toLowerCase()]);
@@ -1172,7 +1247,7 @@ function enterAdmin(res,raw,openPanel){
   unlockedSlot=CR.slotIndex(FILE.period);showCatalog(res.data);
   admin.edit=store.get("ownerEdit",true);$("#obEdit").checked=admin.edit;
   $("#ownerBar").hidden=false;document.body.classList.add("owner");setDirty(false);render();
-  $("#expiry").textContent="Bạn đang xem với quyền chủ shop: thêm, đổi, xoá ảnh và sửa giá, số lượng ngay trên từng sản phẩm, rồi bấm Lưu lên web ở thanh dưới cùng.";
+  $("#expiry").textContent="Bạn đang xem với quyền chủ shop: thêm mã mới, sửa hoặc xoá mã, thêm nhiều ảnh và sửa giá, số lượng ngay trên trang, rồi bấm Lưu lên web ở thanh dưới cùng.";
   $("#ownerBtn").hidden=false;$("#openAdmin").textContent="Mở quản lý";$("#logoutBtn").hidden=false;
   if(!openPanel)$("#admin").hidden=true;
 }
@@ -1225,18 +1300,20 @@ $("#newSched").addEventListener("click",()=>{
 /* số lượng & giá */
 const fmtNum=n=>n==null?"":Number(n).toLocaleString("vi-VN");
 function stockRows(){const q=norm($("#stQ").value||""),f=$("#stFilter").value;
-  return admin.products.map((p,i)=>({p,i})).filter(({p})=>(!q||norm(p.code).includes(q)||norm(p.brand).includes(q))&&(f==="all"||(f==="none"&&p.qty==null)||(f==="out"&&p.qty===0)||(f==="in"&&p.qty>0)||(f==="noprice"&&!p.price)||(f==="sale"&&p.listPrice&&p.price&&p.price<p.listPrice)))}
+  return admin.products.map((p,i)=>({p,i})).filter(({p})=>!p.deleted&&(!q||norm(p.code).includes(q)||norm(p.brand).includes(q))&&(f==="all"||(f==="none"&&p.qty==null)||(f==="out"&&p.qty===0)||(f==="in"&&p.qty>0)||(f==="noprice"&&!p.price)||(f==="sale"&&p.listPrice&&p.price&&p.price<p.listPrice)||(f==="noimg"&&!(p.imgs||[]).length)))}
 function renderStock(){
   const rows=stockRows();
   $("#stCount").textContent=rows.length+" mã đang hiện";
-  $("#stTable").innerHTML=rows.length?`<div class="st-row st-headrow"><span>Mã hàng</span><span>Số lượng</span><span>Giá bán (₫)</span></div>`+rows.map(({p,i})=>`<div class="st-row"><div><span class="code">${esc(p.code)}</span><small>${esc(p.brand)} · ${CATS[p.cat]}${p.listPrice&&p.listPrice!==p.price?` · giá gốc ${fmtNum(p.listPrice)} ₫`:""}</small></div>
+  $("#stTable").innerHTML=rows.length?`<div class="st-row st-headrow"><span>Mã hàng</span><span>Số lượng</span><span>Giá bán (₫)</span></div>`+rows.map(({p,i})=>`<div class="st-row"><div><button class="linkbtn code" data-edit="${i}" title="Sửa thông tin mã">${esc(p.code)}</button><small>${esc(p.brand)} · ${CATS[p.cat]}${p.listPrice&&p.listPrice!==p.price?` · giá gốc ${fmtNum(p.listPrice)} ₫`:""}</small></div>
     <input type="number" min="0" step="1" inputmode="numeric" data-i="${i}" data-f="qty" value="${p.qty??""}" class="${admin.changed.has(i)?"changed":""}" placeholder="—" aria-label="Số lượng ${esc(p.code)}">
     <input type="text" inputmode="numeric" data-i="${i}" data-f="price" value="${fmtNum(p.price)}" class="${admin.changed.has(i)?"changed":""}" placeholder="Liên hệ" aria-label="Giá bán ${esc(p.code)}"></div>`).join(""):'<p class="sub" style="padding:14px">Không có mã nào khớp.</p>';
 }
 function syncData(){DATA=admin.products.map((d,i)=>({...d,id:i}));reconcileCart()}
 function afterEdit(){setDirty(true);syncData();render()}
 function setPrice(p,v){if(p.listPrice===undefined)p.listPrice=p.price??null;p.price=v}
-$("#stQ").addEventListener("input",renderStock);$("#stFilter").addEventListener("change",renderStock);
+$("#stQ").addEventListener("input",renderStock);
+$("#stTable").addEventListener("click",e=>{const b=e.target.closest("[data-edit]");if(b)openProductForm(+b.dataset.edit)});
+$("#stNew").addEventListener("click",()=>openProductForm(null));$("#stFilter").addEventListener("change",renderStock);
 $("#stTable").addEventListener("input",e=>{const inp=e.target.closest("input[data-i]");if(!inp)return;const p=admin.products[inp.dataset.i],v=inp.value.trim();
   if(inp.dataset.f==="qty")p.qty=v===""?null:Math.max(0,Math.floor(+v));
   else{const d=digits(v);setPrice(p,d?+d:null)}
@@ -1278,7 +1355,7 @@ $("#parseOrder").addEventListener("click",()=>{
   const txt=$("#orderPaste").value,box=$("#orderPreview");
   const m=txt.match(/Mã nội bộ:\s*([\dx,\s]+)/i),code=(txt.match(/ĐƠN HÀNG\s+(\S+)/i)||[])[1]||"";
   if(!m){parsedOrder=null;box.innerHTML='<p class="form-msg">Không tìm thấy dòng "Mã nội bộ" trong nội dung. Hãy dán toàn bộ tin nhắn đơn hàng của khách.</p>';return}
-  const items=m[1].split(",").map(s=>s.trim().split("x").map(Number)).filter(([id,q])=>admin.products[id]&&q>0);
+  const items=m[1].split(",").map(s=>s.trim().split("x").map(Number)).filter(([id,q])=>admin.products[id]&&!admin.products[id].deleted&&q>0);
   parsedOrder={code,items};
   const done=code&&admin.deducted.includes(code);
   box.innerHTML=`<h3>Đơn ${esc(code||"không rõ mã")}</h3>${done?'<p class="form-msg">Đơn này đã được trừ kho trước đó.</p>':""}
@@ -1325,7 +1402,7 @@ async function ghDelete(path,message){
 async function purgeTrash(){
   let n=0;
   for(const path of [...admin.trash]){
-    if(admin.products.some(p=>p.img===path)){admin.trash.delete(path);continue}
+    if(admin.products.some(p=>(p.imgs||[]).includes(path))){admin.trash.delete(path);continue}
     try{await ghDelete(path,"Xoá ảnh không dùng "+path);admin.trash.delete(path);n++}catch(e){}
   }
   return n;
@@ -1348,19 +1425,22 @@ $("#obSave").addEventListener("click",saveToWeb);
 $("#obAdmin").addEventListener("click",()=>$("#openAdmin").click());
 
 /* ---------- chủ shop sửa trực tiếp trên trang ---------- */
-const imgLinkValue=img=>img&&!String(img).startsWith("data:")?img:"";
 function markEdited(i){admin.changed.add(+i);setDirty(true);syncData();redraw()}
 let rfT;
-function redraw(){clearTimeout(rfT);rfT=setTimeout(()=>keepFocus(()=>{render();if(detailId!=null)openDetail(detailId);if(admin.on)renderStock()}),0)}
+function redraw(){clearTimeout(rfT);rfT=setTimeout(()=>keepFocus(()=>{
+  render();if(detailId!=null)openDetail(detailId);if(admin.on)renderStock();
+  if(!$("#pform").hidden&&pf.id!=null&&DATA[pf.id]&&!DATA[pf.id].deleted)$("#pfImgs").innerHTML=galleryEditor(DATA[pf.id]);
+}),0)}
 /* giữ con trỏ ở đúng ô sau khi vẽ lại (VD: bấm Tab từ ô số lượng sang ô giá) */
 function keepFocus(fn){
-  const a=document.activeElement,fk=a&&a.dataset?a.dataset.fk:null,inD=!!(fk&&a.closest("#detail"));
+  const a=document.activeElement,fk=a&&a.dataset?a.dataset.fk:null;
+  const scope=fk?(a.closest("#pform")?"#pform":a.closest("#detail")?"#detail":"#grid"):"";
   fn();
-  if(!fk)return;const el=document.querySelector(`${inD?"#detail":"#grid"} [data-fk="${fk}"]`);
+  if(!fk)return;const el=document.querySelector(`${scope} [data-fk="${fk}"]`);
   if(el){el.focus({preventScroll:true});if(el.tagName==="INPUT"&&el.select)el.select()}
 }
 function ownerSet(i,f,v){
-  const p=admin.products[i];if(!p)return;
+  const p=admin.products[i];if(!p||p.deleted)return;
   if(f==="qty"){const str=String(v).trim(),n=str===""?null:Math.max(0,Math.floor(+str));
     if(n!==null&&!Number.isFinite(n)||p.qty===n){redraw();return}p.qty=n}
   else{const d=digits(v),n=d?+d:null;if((p.price??null)===n){redraw();return}setPrice(p,n)}
@@ -1369,59 +1449,222 @@ function ownerSet(i,f,v){
 function ownerChange(e){const t=e.target.closest("input[data-oe]");if(!t||!admin.on)return false;ownerSet(+t.dataset.i,t.dataset.oe,t.value);return true}
 function ownerClick(e){
   if(!admin.on)return false;
-  const t=e.target.closest("[data-oe-pick],[data-oe-del],[data-oe-qinc],[data-oe-qdec],[data-oe-reset]");if(!t||t.disabled)return false;
-  const ds=t.dataset;
-  if(ds.oePick!=null)pickImage(+ds.oePick);
-  else if(ds.oeDel!=null)removeImage(+ds.oeDel);
+  const t=e.target.closest("[data-oe-new],[data-oe-edit],[data-oe-pick],[data-oe-rep],[data-oe-del],[data-oe-main],[data-oe-left],[data-oe-link],[data-oe-qinc],[data-oe-qdec],[data-oe-reset]");
+  if(!t||t.disabled)return false;
+  const ds=t.dataset,pair=v=>v.split(":").map(Number);
+  if(ds.oeNew!=null)openProductForm(null);
+  else if(ds.oeEdit!=null)openProductForm(+ds.oeEdit);
+  else if(ds.oePick!=null)pickFiles({id:+ds.oePick,rep:null},true);
+  else if(ds.oeRep!=null){const [i,k]=pair(ds.oeRep);pickFiles({id:i,rep:k},false)}
+  else if(ds.oeDel!=null){const [i,k]=pair(ds.oeDel);removeImage(i,k)}
+  else if(ds.oeMain!=null){const [i,k]=pair(ds.oeMain);moveImg(i,k,0)}
+  else if(ds.oeLeft!=null){const [i,k]=pair(ds.oeLeft);moveImg(i,k,k-1)}
+  else if(ds.oeLink!=null){
+    const i=+ds.oeLink,inp=t.parentElement.querySelector("[data-oe-linkin]"),v=inp.value.trim(),p=admin.products[i];
+    if(!/^https?:\/\/\S+$/i.test(v)){toast("Dán link ảnh bắt đầu bằng http:// hoặc https://");inp.focus()}
+    else if(p.imgs.length>=MAX_IMGS())toast(`Mỗi mã tối đa ${MAX_IMGS()} ảnh`);
+    else{p.imgs.push(v);markEdited(i);toast("Đã thêm ảnh từ link. Bấm Lưu lên web để khách thấy.")}
+  }
   else if(ds.oeQinc!=null){const i=+ds.oeQinc;ownerSet(i,"qty",(admin.products[i].qty??0)+1)}
   else if(ds.oeQdec!=null){const i=+ds.oeQdec;ownerSet(i,"qty",Math.max(0,(admin.products[i].qty??0)-1))}
   else if(ds.oeReset!=null){const i=+ds.oeReset,p=admin.products[i];p.price=p.listPrice;markEdited(i)}
   return true;
 }
-/* ảnh sản phẩm */
+
+/* ---------- ảnh sản phẩm (nhiều ảnh mỗi mã) ---------- */
 function trashImg(path){if(path&&/^images\//.test(path))admin.trash.add(path)}
-let pickId=null;
-function pickImage(id){pickId=id;const f=$("#oeFile");f.value="";f.click()}
-$("#oeFile").addEventListener("change",e=>{const f=e.target.files[0];if(f&&pickId!=null)uploadImage(pickId,f);pickId=null});
+function moveImg(i,from,to){const a=admin.products[i].imgs;if(from===to||to<0||from>=a.length)return;const [x]=a.splice(from,1);a.splice(to,0,x);if(detailId===i)galIdx=to;markEdited(i)}
+function removeImage(i,k){
+  const p=admin.products[i];if(!p||!p.imgs[k])return;
+  if(!confirm(`Xoá ảnh ${k+1} của ${p.code}?`))return;
+  trashImg(p.imgs[k]);p.imgs.splice(k,1);markEdited(i);toast("Đã xoá ảnh. Bấm Lưu lên web để áp dụng.");
+}
+let pickTarget=null;
+function pickFiles(target,multiple){pickTarget=target;const f=$("#oeFile");f.multiple=multiple;f.value="";f.click()}
+$("#oeFile").addEventListener("change",e=>{
+  const files=[...e.target.files],t=pickTarget;pickTarget=null;if(!files.length||!t)return;
+  if(t.pf)addPending(files);else uploadImages(t.id,files,t.rep);
+});
+const isImg=f=>/^image\//.test(f.type)||/\.(jpe?g|png|webp|gif|heic|heif)$/i.test(f.name);
 async function resizeImage(file,max,q){
   let src,w,h;
   try{src=await createImageBitmap(file);w=src.width;h=src.height}
-  catch(e){src=await new Promise((res,rej)=>{const im=new Image();im.onload=()=>res(im);im.onerror=()=>rej(new Error("Trình duyệt không đọc được ảnh này. Hãy chọn ảnh JPG hoặc PNG."));im.src=URL.createObjectURL(file)});w=src.naturalWidth;h=src.naturalHeight}
+  catch(e){src=await new Promise((res,rej)=>{const im=new Image();im.onload=()=>res(im);im.onerror=()=>rej(new Error("Trình duyệt không đọc được ảnh "+file.name+". Hãy chọn ảnh JPG hoặc PNG."));im.src=URL.createObjectURL(file)});w=src.naturalWidth;h=src.naturalHeight}
   const sc=Math.min(1,max/Math.max(w,h)),c=document.createElement("canvas");c.width=Math.max(1,Math.round(w*sc));c.height=Math.max(1,Math.round(h*sc));
   const x=c.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,c.width,c.height);x.drawImage(src,0,0,c.width,c.height);
   return c.toDataURL("image/jpeg",q);
 }
-async function uploadImage(id,file){
-  const p=admin.products[id];if(!p||admin.uploading.has(id))return;
-  if(!/^image\//.test(file.type)&&!/\.(jpe?g|png|webp|gif|heic|heif)$/i.test(file.name)){toast("File này không phải ảnh");return}
-  if(file.size>25e6){toast("Ảnh quá lớn (trên 25 MB)");return}
-  admin.uploading.add(id);redraw();
-  try{
-    const useGh=!!gh.token,had=!!p.img;
-    const url=await resizeImage(file,useGh?1000:520,useGh?.82:.72);
-    let src=url;
-    if(useGh){
-      const slug=norm(p.code).toLowerCase().replace(/[^a-z0-9]/g,"")||"sp";
-      src=`images/${slug}-${id}-${Date.now().toString(36)}.jpg`;
-      await ghPut(src,url.split(",")[1],(had?"Đổi ảnh ":"Thêm ảnh ")+p.code);
-      admin.previews[src]=url;
+async function processImage(p,id,file){
+  const useGh=!!gh.token,url=await resizeImage(file,useGh?1000:520,useGh?.82:.72);
+  if(!useGh)return url;
+  const slug=norm(p.code).toLowerCase().replace(/[^a-z0-9]/g,"")||"sp";
+  const path=`images/${slug}-${id}-${Date.now().toString(36)}${Math.random().toString(36).slice(2,5)}.jpg`;
+  await ghPut(path,url.split(",")[1],"Ảnh "+p.code);
+  admin.previews[path]=url;return path;
+}
+/* rep = vị trí ảnh cần đổi; null = thêm ảnh mới (được nhiều ảnh) */
+async function uploadImages(id,files,rep){
+  const p=admin.products[id];if(!p||p.deleted)return;
+  if(admin.uploading.has(id)){toast("Đang tải ảnh cho mã này, đợi xong rồi thêm tiếp");return}
+  files=[...files].filter(f=>isImg(f)&&f.size<=25e6);
+  if(!files.length){toast("Không có file ảnh hợp lệ (JPG, PNG… dưới 25 MB)");return}
+  if(rep!=null)files=files.slice(0,1);
+  else{const room=MAX_IMGS()-p.imgs.length;
+    if(room<=0){toast(`Mỗi mã tối đa ${MAX_IMGS()} ảnh${gh.token?"":" khi chưa có GitHub token"}`);return}
+    if(files.length>room){toast(`Chỉ thêm được ${room} ảnh nữa, các ảnh còn lại bị bỏ qua`);files=files.slice(0,room)}}
+  let ok=0,err="";
+  for(let k=0;k<files.length;k++){
+    admin.uploading.set(id,files.length>1?`Đang tải ảnh ${k+1}/${files.length}…`:"Đang tải ảnh lên…");redraw();
+    try{const src=await processImage(p,id,files[k]);
+      if(rep!=null){trashImg(p.imgs[rep]);p.imgs[rep]=src}else p.imgs.push(src);ok++}
+    catch(e){err=e.message||"Tải ảnh không thành công"}
+  }
+  admin.uploading.delete(id);
+  if(ok){markEdited(id);toast((err?`Đã tải ${ok}/${files.length} ảnh. Lỗi: ${err}`:rep!=null?`Đã đổi ảnh ${p.code}`:`Đã thêm ${ok} ảnh cho ${p.code}`)+". Bấm Lưu lên web để khách thấy.")}
+  else{redraw();toast(err)}
+}
+
+/* ---------- thêm / sửa / xoá mã ---------- */
+const SHAPES=[["80","Hình thoi 80° (C)"],["55","Hình thoi 55° (D)"],["35","Hình thoi 35° (V)"],["tri","Tam giác (T)"],["trigon","Tam giác lồi (W)"],["sq","Vuông (S)"],["round","Tròn (R)"],["rect","Chữ nhật (L)"],["par","Hình bình hành (A, B, K)"],["pent","Ngũ giác (P)"],["hex","Lục giác (H)"],["oct","Bát giác (O)"]];
+const SHAPE_BY={C:"80",M:"80",E:"80",D:"55",V:"35",T:"tri",W:"trigon",S:"sq",R:"round",L:"rect",A:"par",B:"par",K:"par",P:"pent",H:"hex",O:"oct"};
+const guessShape=code=>SHAPE_BY[String(code).trim().toUpperCase()[0]]||"sq";
+function canonBrand(b){
+  b=String(b||"").trim().replace(/\s+/g," ");if(!b||/^kh[aá]c$/i.test(b))return "Khác";
+  const hit=admin.products.find(p=>!p.deleted&&p.brand&&p.brand.toUpperCase()===b.toUpperCase());
+  return hit?hit.brand:b.toUpperCase();
+}
+const findDup=(brand,code,except)=>admin.products.findIndex((p,i)=>!p.deleted&&i!==except&&norm(p.code)===norm(code)&&String(p.brand).toUpperCase()===brand.toUpperCase());
+let pf={id:null,mode:"one",files:[]};
+function openProductForm(id){
+  if(!admin.on)return;
+  const p=id!=null?admin.products[id]:null;if(id!=null&&(!p||p.deleted))return;
+  pf.files.forEach(f=>URL.revokeObjectURL(f.url));
+  pf={id,mode:"one",files:[]};
+  const brandList=[...new Set(admin.products.filter(x=>!x.deleted).map(x=>x.brand))].sort();
+  const v=p||{brand:st.brand||"",code:"",cat:st.cat!=="all"?st.cat:"tien",iso:[...st.iso],shape:"",qty:null,price:null,link:""};
+  $("#pformBox").innerHTML=`<header class="ad-head"><h2 id="pfTitle">${p?"Sửa mã "+esc(p.code):"Thêm mã mới"}</h2><button class="close" type="button" data-pfclose aria-label="Đóng">×</button></header>
+  ${p?"":`<div class="tabs ad-tabs" role="group" aria-label="Cách thêm"><button type="button" data-pfmode="one" aria-pressed="true">Một mã</button><button type="button" data-pfmode="many" aria-pressed="false">Nhiều mã cùng lúc</button></div>`}
+  <form id="pfForm" novalidate autocomplete="off">
+    <div class="form-grid">
+      <label class="pf-one"><span>Mã hàng <span class="req">*</span></span><input name="code" value="${esc(v.code)}" spellcheck="false" placeholder="VD: CNMG120408-MA"></label>
+      <label>Hãng<input name="brand" list="pfBrands" value="${esc(v.brand)}" placeholder="VD: KYOCERA (trống = Khác)"></label>
+      <label>Loại sản phẩm<select name="cat">${Object.entries(CATS).filter(([k])=>k!=="all").map(([k,t])=>`<option value="${k}" ${v.cat===k?"selected":""}>${t}</option>`).join("")}</select></label>
+      <label>Hình dạng chíp<select name="shape"><option value="">Tự nhận theo mã</option>${SHAPES.map(([k,t])=>`<option value="${k}" ${p&&v.shape===k?"selected":""}>${t}</option>`).join("")}</select></label>
+      <label class="pf-one">Số lượng<input name="qty" type="number" min="0" inputmode="numeric" value="${v.qty??""}" placeholder="Trống = chưa cập nhật"></label>
+      <label class="pf-one">Giá bán (₫)<input name="price" inputmode="numeric" value="${fmtNum(v.price)}" placeholder="Trống = báo giá khi đặt"></label>
+      <label class="pf-one full">Link trang sản phẩm chính hãng<input name="link" value="${esc(v.link||"")}" placeholder="https://… (không bắt buộc)"></label>
+      <label class="pf-many full" hidden>Danh sách mã, mỗi dòng một mã<textarea name="lines" spellcheck="false" placeholder="CNMG120408-MA; 5; 120000&#10;TNMG160404; 2&#10;APMT1135PDER-M2"></textarea></label>
+    </div>
+    <p class="sub small pf-many" hidden style="margin-top:6px">Mỗi dòng: <b>mã; số lượng; giá</b> (số lượng và giá có thể bỏ trống). Dán thẳng 3 cột mã, số lượng, giá từ Excel cũng được. Hãng, loại, hình dạng và vật liệu chọn ở đây áp dụng cho tất cả các mã trong danh sách. Mã trùng với mã đã có sẽ được bỏ qua.</p>
+    <div class="pf-sec">Nhóm vật liệu gia công (ISO)</div>
+    <div class="iso-pick">${Object.keys(ISO).map(k=>`<label style="--c:var(--${k})"><input type="checkbox" name="iso" value="${k}" ${v.iso.includes(k)?"checked":""}><b>${k}</b>${ISO[k][0]}</label>`).join("")}</div>
+    <div class="pf-one"><div class="pf-sec">Ảnh sản phẩm</div><div id="pfImgs">${p?galleryEditor(DATA[id]):""}</div></div>
+    <p class="form-msg" id="pfMsg" role="alert"></p>
+    <div class="pf-foot">${p?`<button type="button" class="add danger" data-pfdel>Xoá mã này</button>`:""}<button type="button" class="add" data-pfclose>Huỷ</button><button type="submit" class="primary" id="pfSubmit">${p?"Lưu thay đổi":"Thêm mã"}</button></div>
+  </form>
+  <datalist id="pfBrands">${brandList.map(b=>`<option value="${esc(b)}">`).join("")}</datalist>`;
+  if(!p)renderPendingImgs();
+  $("#pform").hidden=false;document.body.classList.add("noscroll");$("#pform").scrollTop=0;
+  setTimeout(()=>$('#pfForm [name="code"]').focus(),30);
+}
+function closeProductForm(){
+  pf.files.forEach(f=>URL.revokeObjectURL(f.url));pf={id:null,mode:"one",files:[]};$("#pform").hidden=true;
+  if($("#detail").hidden&&!$("#drawer").classList.contains("open"))document.body.classList.remove("noscroll");
+}
+/* ảnh chọn trước khi mã được tạo */
+function renderPendingImgs(){
+  const max=MAX_IMGS();
+  $("#pfImgs").innerHTML=`<div class="ge">${pf.files.map((f,k)=>`<figure class="ge-item"><div class="ge-img" style="cursor:default"><img src="${f.url}" alt="Ảnh ${k+1}">${k?"":'<span class="ge-main">Ảnh chính</span>'}</div>
+    <div class="ge-act"><button type="button" data-pfleft="${k}" ${k?"":"disabled"} aria-label="Chuyển ảnh ${k+1} lên trước">←</button><button type="button" class="danger" data-pfrm="${k}">Xoá</button></div></figure>`).join("")}
+    ${pf.files.length<max?`<button type="button" class="ge-add" data-pfpick>+ Thêm ảnh<small>Chọn được nhiều ảnh một lần · tối đa ${max}</small></button>`:""}</div>
+  <p class="sub small" style="margin:0">Ảnh đầu tiên là ảnh chính. Ảnh được tải lên sau khi bấm Thêm mã. Có thể kéo thả ảnh vào đây.</p>`;
+}
+function addPending(files){
+  const max=MAX_IMGS();files=files.filter(f=>isImg(f)&&f.size<=25e6);
+  if(!files.length){toast("Không có file ảnh hợp lệ");return}
+  const room=max-pf.files.length;if(files.length>room)toast(`Mỗi mã tối đa ${max} ảnh, đã bỏ bớt ${files.length-room} ảnh`);
+  files.slice(0,Math.max(0,room)).forEach(file=>pf.files.push({file,url:URL.createObjectURL(file)}));renderPendingImgs();
+}
+function afterAdd(ids,dup){
+  toast(ids.length===1?`Đã thêm mã ${admin.products[ids[0]].code}. Bấm Lưu lên web để khách thấy.`:`Đã thêm ${ids.length} mã${dup.length?`, bỏ qua ${dup.length} mã đã có`:""}. Bấm Lưu lên web để khách thấy.`);
+  setTimeout(()=>{const el=$(`#grid [data-drop="${ids[0]}"]`);
+    if(el){el.scrollIntoView({block:"center",behavior:"smooth"});ids.forEach(i=>{const c=$(`#grid [data-drop="${i}"]`);if(c)c.classList.add("flash")})}
+    else if(editing())toast("Mã mới đang bị ẩn bởi bộ lọc hoặc ô tìm kiếm. Xoá bộ lọc để thấy.")},80);
+}
+function submitProductForm(f){
+  const msg=$("#pfMsg");
+  const brand=canonBrand(f.brand.value),cat=f.cat.value,shapeSel=f.shape.value,iso=[...f.querySelectorAll('[name="iso"]:checked')].map(x=>x.value);
+  if(pf.mode==="many"&&pf.id==null){
+    const rows=f.lines.value.split(/\r?\n/).map(l=>l.split(/[;\t|]/).map(x=>x.trim())).filter(r=>r[0]);
+    if(!rows.length){msg.textContent="Dán ít nhất một mã, mỗi dòng một mã.";f.lines.focus();return}
+    const added=[],dup=[],seen=new Set();
+    for(const [raw,q,pr] of rows){
+      const code=raw.replace(/\s+/g," "),key=norm(code);
+      if(seen.has(key)||findDup(brand,code,null)>=0){dup.push(code);continue}seen.add(key);
+      const qd=digits(q),pd=digits(pr);
+      added.push(admin.products.push({brand,code,cat,iso:[...iso],shape:shapeSel||guessShape(code),qty:qd!==""?+qd:null,price:pd?+pd:null,imgs:[]})-1);
     }
-    trashImg(p.img);p.img=src;admin.uploading.delete(id);markEdited(id);
-    toast((had?"Đã đổi ảnh ":"Đã thêm ảnh ")+p.code+(useGh?". Bấm Lưu lên web để khách thấy.":" (lưu kèm dữ liệu vì chưa có GitHub token). Bấm Lưu lên web."));
-  }catch(err){toast(err.message||"Tải ảnh không thành công")}
-  finally{admin.uploading.delete(id);redraw()}
+    if(!added.length){msg.textContent=`Cả ${dup.length} mã đều đã có trong danh mục của hãng ${brand}.`;return}
+    added.forEach(i=>admin.changed.add(i));closeProductForm();markEdited(added[0]);afterAdd(added,dup);return;
+  }
+  const code=f.code.value.trim().replace(/\s+/g," ");
+  if(!code){msg.textContent="Nhập mã hàng.";f.code.focus();return}
+  const di=findDup(brand,code,pf.id);
+  if(di>=0){msg.textContent=`Mã ${admin.products[di].code} của hãng ${brand} đã có trong danh mục.`;f.code.focus();return}
+  const qv=f.qty.value.trim(),qty=qv===""?null:Math.max(0,Math.floor(+qv)),pd=digits(f.price.value),price=pd?+pd:null;
+  if(qty!==null&&!Number.isFinite(qty)){msg.textContent="Số lượng chưa đúng.";f.qty.focus();return}
+  const link=f.link.value.trim(),shape=shapeSel||guessShape(code);
+  if(pf.id!=null){
+    const id=pf.id,p=admin.products[id];Object.assign(p,{brand,code,cat,iso,shape,qty});
+    if(link)p.link=link;else delete p.link;
+    if((p.price??null)!==price)setPrice(p,price);
+    closeProductForm();markEdited(id);toast("Đã lưu thông tin "+code+". Bấm Lưu lên web để khách thấy.");return;
+  }
+  const files=pf.files.map(x=>x.file);
+  const id=admin.products.push({brand,code,cat,iso,shape,qty,price,imgs:[],...(link?{link}:{})})-1;
+  closeProductForm();markEdited(id);afterAdd([id],[]);
+  if(files.length)uploadImages(id,files,null);
 }
-function removeImage(id){
-  const p=admin.products[id];if(!p||!p.img)return;
-  if(!confirm(`Xoá ảnh của ${p.code}?`))return;
-  trashImg(p.img);delete p.img;markEdited(id);toast("Đã xoá ảnh "+p.code+". Bấm Lưu lên web để áp dụng.");
+function deleteProduct(id){
+  const p=admin.products[id];if(!p||p.deleted)return;
+  if(!confirm(`Xoá mã ${p.code} (${p.brand}) khỏi danh mục?${p.imgs.length?" Ảnh của mã này cũng bị xoá.":""}`))return;
+  p.imgs.forEach(trashImg);
+  admin.products[id]={deleted:true,code:p.code,brand:p.brand};/* giữ chỗ để giỏ hàng và đơn cũ của khách không bị lệch mã */
+  closeProductForm();if(detailId===id)closeDetail();
+  markEdited(id);toast(`Đã xoá mã ${p.code}. Bấm Lưu lên web để áp dụng.`);
 }
-for(const box of [$("#grid"),$("#detail")]){
-  box.addEventListener("keydown",e=>{if(e.key==="Enter"&&e.target.matches("input[data-oe]")){e.preventDefault();e.target.blur()}});
-  box.addEventListener("dragover",e=>{const z=editing()&&e.target.closest("[data-drop],#detail .dimg");if(!z||![...e.dataTransfer.types].includes("Files"))return;e.preventDefault();z.classList.add("drop")});
+$("#pform").addEventListener("submit",e=>{e.preventDefault();submitProductForm(e.target)});
+$("#pform").addEventListener("click",e=>{
+  if(e.target===$("#pform")||e.target.closest("[data-pfclose]")){closeProductForm();return}
+  const t=e.target.closest("button");if(!t)return;
+  if(t.dataset.pfmode){pf.mode=t.dataset.pfmode;
+    $$("#pformBox [data-pfmode]").forEach(b=>b.setAttribute("aria-pressed",b===t));
+    $$("#pformBox .pf-one").forEach(x=>x.hidden=pf.mode!=="one");$$("#pformBox .pf-many").forEach(x=>x.hidden=pf.mode!=="many");
+    $("#pfSubmit").textContent=pf.mode==="one"?"Thêm mã":"Thêm các mã";$("#pfMsg").textContent="";
+    $(pf.mode==="one"?'#pfForm [name="code"]':'#pfForm [name="lines"]').focus();return}
+  if(t.hasAttribute("data-pfpick")){pickFiles({pf:true},true);return}
+  if(t.dataset.pfrm!=null){const [x]=pf.files.splice(+t.dataset.pfrm,1);URL.revokeObjectURL(x.url);renderPendingImgs();return}
+  if(t.dataset.pfleft!=null){const k=+t.dataset.pfleft;[pf.files[k-1],pf.files[k]]=[pf.files[k],pf.files[k-1]];renderPendingImgs();return}
+  if(t.hasAttribute("data-pfdel")){deleteProduct(pf.id);return}
+  ownerClick(e);
+});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#pform").hidden){e.stopImmediatePropagation();closeProductForm()}},true);
+$("#obNew").addEventListener("click",()=>openProductForm(null));
+
+/* bàn phím và kéo thả ảnh */
+const dropZone=e=>editing()&&e.target.closest("[data-drop],#detail .dimg,#detail .ge,#pfImgs");
+for(const box of [$("#grid"),$("#detail"),$("#pform")]){
+  box.addEventListener("keydown",e=>{
+    if(e.key!=="Enter")return;
+    if(e.target.matches("input[data-oe]")){e.preventDefault();e.target.blur()}
+    else if(e.target.matches("input[data-oe-linkin]")){e.preventDefault();e.target.parentElement.querySelector("[data-oe-link]").click()}
+  });
+  box.addEventListener("dragover",e=>{const z=dropZone(e);if(!z||![...e.dataTransfer.types].includes("Files"))return;e.preventDefault();z.classList.add("drop")});
   box.addEventListener("dragleave",e=>{const z=e.target.closest(".drop");if(z&&!z.contains(e.relatedTarget))z.classList.remove("drop")});
-  box.addEventListener("drop",e=>{const z=editing()&&e.target.closest("[data-drop],#detail .dimg");if(!z)return;e.preventDefault();z.classList.remove("drop");
-    const f=e.dataTransfer.files[0],id=z.dataset.drop!=null?+z.dataset.drop:detailId;if(f&&id!=null)uploadImage(id,f)});
+  box.addEventListener("drop",e=>{const z=dropZone(e);if(!z)return;e.preventDefault();z.classList.remove("drop");
+    const files=[...e.dataTransfer.files];if(!files.length)return;
+    if(z.id==="pfImgs"){if(pf.id==null)addPending(files);else uploadImages(pf.id,files,null);return}
+    const id=z.dataset.drop!=null?+z.dataset.drop:detailId;if(id!=null)uploadImages(id,files,null)});
 }
 $("#obEdit").addEventListener("change",e=>{admin.edit=e.target.checked;store.set("ownerEdit",admin.edit);render();if(detailId!=null)openDetail(detailId)});
 
